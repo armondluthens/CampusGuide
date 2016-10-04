@@ -1,0 +1,9 @@
+typedef enum Messages{
+  OBJECT_DETECTED,
+  TURN_RIGHT,
+  TURN_LEFT,
+  MOVE_STRAIGHT,
+  TURN_AROUND,
+  ARRIVED
+};
+
