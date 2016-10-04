@@ -75,12 +75,19 @@ void set_all(int level){
   }
 }
 /**
+ * description: sets a single pin high then low
+ **/
+void pulse_single(int pin){
+   digitalWrite(pin, HIGH);
+   delay(1000);
+   digitalWrite(pin, LOW);
+}
+/**
  * desciption: depending on the message, vibrate the appropriate motors
  **/
 void vibrate_motors(int message){
   
   if(message == OBJECT_DETECTED){
-    Serial.println("obj");
     set_all(HIGH);
     delay(500);
     set_all(LOW);
@@ -90,17 +97,26 @@ void vibrate_motors(int message){
     set_all(LOW);
   }
   else if(message == TURN_RIGHT){
-    
+    pulse_single(RIGHT);
   }
   else if(message == TURN_LEFT){
-    
+    pulse_single(LEFT);
   }
   else if(message == MOVE_STRAIGHT){
-    
+    pulse_single(CENTER);
   }
   else if(message == TURN_AROUND){
+    digitalWrite(CENTER, HIGH);
+    delay(500);
+    digitalWrite(CENTER, LOW);
+    digitalWrite(CENTER, HIGH);
+    delay(500);
+    digitalWrite(CENTER, LOW);
   }
   else if(message == ARRIVED){
+    set_all(HIGH);
+    delay(1000);
+    set_all(LOW);
   }
   
 }
