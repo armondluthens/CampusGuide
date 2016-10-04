@@ -19,7 +19,7 @@ void setup() {
 }
 
 void loop() {
-   int distance = read_distance();
+  int distance = read_distance();
   if(distance <= distance_threshold && distance > 0){
       Serial.println("within distance");
   }
@@ -31,13 +31,12 @@ void blue_tooth_test(){
     switch(inChar) {
       case '1':
         digitalWrite(13, HIGH);
-        vibrate_motors(1);
       break;
       case '0':
         digitalWrite(13, LOW);
-        vibrate_motors(2);
       break;
     }
+    vibrate_motors(inChar - 48);
     Serial.println(inChar);
   }
 }
@@ -53,9 +52,36 @@ int read_distance(){
    distance_sensor = analogRead(0)/vi;
    // Serial.println(distance_sensor);
 }
-void vibrate_motors(int i){
-  digitalWrite(motor_pins[i], HIGH);
-  delay(500);
-  digitalWrite(motor_pins[i], LOW);
+void set_all(int level){
+  
+  for(int i = 0; i < 3; i++){
+      digitalWrite(motor_pins[i], level);
+  }
+}
+void vibrate_motors(int message){
+  if(message == OBJECT_DETECTED){
+    Serial.println("obj");
+    set_all(HIGH);
+    delay(500);
+    set_all(LOW);
+    delay(500);
+    set_all(HIGH);
+    delay(500);
+    set_all(LOW);
+  }
+  else if(message == TURN_RIGHT){
+    
+  }
+  else if(message == TURN_LEFT){
+    
+  }
+  else if(message == MOVE_STRAIGHT){
+    
+  }
+  else if(message == TURN_AROUND){
+  }
+  else if(message == ARRIVED){
+  }
+  
 }
 
