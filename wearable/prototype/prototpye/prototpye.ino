@@ -1,31 +1,41 @@
 #include "messages.h"
+#include "motors.h"
 
-// 2 meters... there are 39.3701 inches in a meter
-const float distance_threshold = 2.0 * 39.3701;
-const int bluetooth_pin; 
-Messages message;
-float vi = 3.3/512;
-const int motor_pins[] = {2, 3, 4};
-// calculate distance from analog input: http://www.maxbotix.com/articles/032.htm
+#define DEBUG 1
 
+const float distance_threshold = 2.0 * 40;
+const float vi = 3.3/512;
+const int motor_pins[MOTOR_COUNT] = {RIGHT, LEFT, CENTER};
+/**
+ * description: initialize I/O pins & set up serial for bluetooth
+ * */
 void setup() {
   Serial.begin(9600);
-  // for bluetooth test
-  pinMode(13, OUTPUT);
+  #ifdef DEBUG
+    pinMode(13, OUTPUT);
+  #endif  
   // initialize motor pins to be outputs
-  for(int i = 0; i < 3; i++){
+  for(int i = 0; i < MOTOR_COUNT; i++){
     pinMode(motor_pins[i], OUTPUT);
   }
 }
-
+/**
+ *  reads from the distance sensor, runs bluetooth test
+ * */
 void loop() {
   int distance = read_distance();
   if(distance <= distance_threshold && distance > 0){
+    #ifdef DEBUG
       Serial.println("within distance");
+    #endif 
   }
-  blue_tooth_test();
+  #ifdef DEBUG
+    blue_tooth_test();
+  #endif  
 }
+#ifdef DEBUG
 void blue_tooth_test(){
+  // switch LED on & off
   while (Serial.available()) {
     char inChar = (char)Serial.read();
     switch(inChar) {
@@ -37,28 +47,38 @@ void blue_tooth_test(){
       break;
     }
     vibrate_motors(inChar - 48);
-    Serial.println(inChar);
+    Serial.println("sent: " + inChar);
   }
 }
+#endif
+/**
+ * description: reads the sonar sensor from the analog pin, and then convert to appropriate range
+ * calculate distance from analog input: http://www.maxbotix.com/articles/032.html
+ * */
 int read_distance(){
    float distance_sensor = -1;
-     // average out over 8 readings   
+   // average out over 8 readings   
    int i = 0;
    for (i=0; i<8; i++) {
      distance_sensor += analogRead(0);
      delay(50);
    }
    distance_sensor /= 8;
-   distance_sensor = analogRead(0)/vi;
-   // Serial.println(distance_sensor);
 }
+/**
+ * description: sets all of the motor pins to high or low
+ **/
 void set_all(int level){
   
-  for(int i = 0; i < 3; i++){
+  for(int i = 0; i < MOTOR_COUNT; i++){
       digitalWrite(motor_pins[i], level);
   }
 }
+/**
+ * desciption: depending on the message, vibrate the appropriate motors
+ **/
 void vibrate_motors(int message){
+  
   if(message == OBJECT_DETECTED){
     Serial.println("obj");
     set_all(HIGH);
