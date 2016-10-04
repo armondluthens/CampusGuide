@@ -5,14 +5,17 @@ const float distance_threshold = 2.0 * 39.3701;
 const int bluetooth_pin; 
 Messages message;
 float vi = 3.3/512;
-String inputString = "";         // a string to hold incoming data
-boolean stringComplete = false;  // whether the string is complete
+const int motor_pins[] = {2, 3, 4};
 // calculate distance from analog input: http://www.maxbotix.com/articles/032.htm
 
 void setup() {
   Serial.begin(9600);
   // for bluetooth test
   pinMode(13, OUTPUT);
+  // initialize motor pins to be outputs
+  for(int i = 0; i < 3; i++){
+    pinMode(motor_pins[i], OUTPUT);
+  }
 }
 
 void loop() {
@@ -28,9 +31,11 @@ void blue_tooth_test(){
     switch(inChar) {
       case '1':
         digitalWrite(13, HIGH);
+        vibrate_motors(1);
       break;
       case '0':
         digitalWrite(13, LOW);
+        vibrate_motors(2);
       break;
     }
     Serial.println(inChar);
@@ -46,9 +51,11 @@ int read_distance(){
    }
    distance_sensor /= 8;
    distance_sensor = analogRead(0)/vi;
-   Serial.println(distance_sensor);
+   // Serial.println(distance_sensor);
 }
-void vibrate_motors(){
-  
+void vibrate_motors(int i){
+  digitalWrite(motor_pins[i], HIGH);
+  delay(500);
+  digitalWrite(motor_pins[i], LOW);
 }
 
