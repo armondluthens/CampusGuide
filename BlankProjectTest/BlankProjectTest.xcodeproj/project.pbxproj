@@ -201,15 +201,18 @@
 					E517F9021D9D909F005FEAFF = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 3FFT7J828B;
+						LastSwiftMigration = 0800;
 					};
 					E517F9191D9D909F005FEAFF = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 3FFT7J828B;
+						LastSwiftMigration = 0800;
 						TestTargetID = E517F9021D9D909F005FEAFF;
 					};
 					E517F9241D9D909F005FEAFF = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 3FFT7J828B;
+						LastSwiftMigration = 0800;
 						TestTargetID = E517F9021D9D909F005FEAFF;
 					};
 				};
@@ -413,9 +416,11 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = BlankProjectTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.armondluthens.BlankProjectTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -428,9 +433,11 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = BlankProjectTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.armondluthens.BlankProjectTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -442,6 +449,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.armondluthens.BlankProjectTestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlankProjectTest.app/BlankProjectTest";
 			};
 			name = Debug;
@@ -454,6 +462,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.armondluthens.BlankProjectTestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlankProjectTest.app/BlankProjectTest";
 			};
 			name = Release;
@@ -465,6 +474,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.armondluthens.BlankProjectTestUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = BlankProjectTest;
 				USES_XCTRUNNER = YES;
 			};
@@ -477,6 +487,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.armondluthens.BlankProjectTestUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = BlankProjectTest;
 				USES_XCTRUNNER = YES;
 			};
@@ -501,6 +512,7 @@
 				E517F9301D9D909F005FEAFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E517F9311D9D909F005FEAFF /* Build configuration list for PBXNativeTarget "BlankProjectTestTests" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +521,7 @@
 				E517F9331D9D909F005FEAFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E517F9341D9D909F005FEAFF /* Build configuration list for PBXNativeTarget "BlankProjectTestUITests" */ = {
 			isa = XCConfigurationList;
@@ -517,6 +530,7 @@
 				E517F9361D9D909F005FEAFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
