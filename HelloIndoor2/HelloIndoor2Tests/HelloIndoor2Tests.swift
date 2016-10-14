@@ -1,15 +1,15 @@
 //
-//  BlankProjectTestTests.swift
-//  BlankProjectTestTests
+//  HelloIndoor2Tests.swift
+//  HelloIndoor2Tests
 //
 //  Created by Armond Luthens on 9/29/16.
 //  Copyright © 2016 armondluthens. All rights reserved.
 //
 
 import XCTest
-@testable import BlankProjectTest
+@testable import HelloIndoor2
 
-class BlankProjectTestTests: XCTestCase {
+class HelloIndoor2Tests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -28,7 +28,7 @@ class BlankProjectTestTests: XCTestCase {
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
-        self.measure {
+        self.measureBlock {
             // Put the code you want to measure the time of here.
         }
     }
