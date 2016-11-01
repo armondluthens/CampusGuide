@@ -5,9 +5,11 @@
 //  Created by Stephanie Smith on 10/15/2016.
 
 import UIKit
+import CoreBluetooth
+
 var currentWord: String!
 var kLevelUpdatesPerSecond = 18
-class ViewController: UIViewController, OEEventsObserverDelegate {
+class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManagerDelegate,CBPeripheralDelegate {
     /**
      * keeps you continuously updated about the status of your listening sesion
      **/
@@ -38,6 +40,13 @@ class ViewController: UIViewController, OEEventsObserverDelegate {
     /**
      * description: adding words to the language model
      **/
+    
+    // bluetooth data
+    private var centralManager: CBCentralManager!
+    private var discoveredPeripheral: CBPeripheral!
+    
+    // And somewhere to store the incoming data
+    private let data = NSMutableData()
     func addWords() {
         // add anything here that you want to be recognized. Must be in capital letters
         words.append("SUNDAY")
@@ -76,15 +85,6 @@ class ViewController: UIViewController, OEEventsObserverDelegate {
         
         lmPath = lmGenerator.pathToSuccessfullyGeneratedLanguageModel(withRequestedName: name)
         dicPath = lmGenerator.pathToSuccessfullyGeneratedDictionary(withRequestedName: name)
-        // more confusion
-//        do{
-//            try (OEPocketsphinxController.sharedInstance().setActive(true))
-//        }
-//        catch{
-//        }
-//        (OEPocketsphinxController.sharedInstance().startListeningWithLanguageModel(atPath: lmPath, dictionaryAtPath: dicPath, acousticModelAtPath: OEAcousticModel.path(toModel: "AcousticModelEnglish"), languageModelIsJSGF: false))
-//
-        // end confusion
     }
     /**
      * description: called when the view controller is loaded
@@ -92,6 +92,8 @@ class ViewController: UIViewController, OEEventsObserverDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         OEPocketsphinxController.sharedInstance().requestMicPermission()
+        // Start up the CBCentralManager
+        centralManager = CBCentralManager(delegate: self, queue: nil)
         loadOpenEars()
     }
     /**
