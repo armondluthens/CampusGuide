@@ -4,7 +4,6 @@
 //
 //  Created by Stephanie Smith on 10/15/2016.
 
-
 import UIKit
 var currentWord: String!
 var kLevelUpdatesPerSecond = 18
@@ -24,7 +23,9 @@ class ViewController: UIViewController, OEEventsObserverDelegate {
      * path to dictionary which holds the words
      **/
     var dicPath: String!
-
+    /**
+     * the record button
+     **/
     @IBOutlet weak var recordButton: UIButton!
     /**
      * text view that displays the text that the speech recoginition API interprets
@@ -38,7 +39,7 @@ class ViewController: UIViewController, OEEventsObserverDelegate {
      * description: adding words to the language model
      **/
     func addWords() {
-        // add any thing here that you want to be recognized. Must be in capital letters
+        // add anything here that you want to be recognized. Must be in capital letters
         words.append("SUNDAY")
         words.append("MONDAY")
         words.append("TUESDAY")
@@ -60,7 +61,7 @@ class ViewController: UIViewController, OEEventsObserverDelegate {
         words.append("DECEMBER")
     }
     /**
-     *
+     * description: instantiate API
      */
     func loadOpenEars() {
        
@@ -76,67 +77,71 @@ class ViewController: UIViewController, OEEventsObserverDelegate {
         lmPath = lmGenerator.pathToSuccessfullyGeneratedLanguageModel(withRequestedName: name)
         dicPath = lmGenerator.pathToSuccessfullyGeneratedDictionary(withRequestedName: name)
         // more confusion
-        do{
-            try (OEPocketsphinxController.sharedInstance().setActive(true))
-        }
-        catch{
-        }
-        
-        (OEPocketsphinxController.sharedInstance().startListeningWithLanguageModel(atPath: lmPath, dictionaryAtPath: dicPath, acousticModelAtPath: OEAcousticModel.path(toModel: "AcousticModelEnglish"), languageModelIsJSGF: false))
-
+//        do{
+//            try (OEPocketsphinxController.sharedInstance().setActive(true))
+//        }
+//        catch{
+//        }
+//        (OEPocketsphinxController.sharedInstance().startListeningWithLanguageModel(atPath: lmPath, dictionaryAtPath: dicPath, acousticModelAtPath: OEAcousticModel.path(toModel: "AcousticModelEnglish"), languageModelIsJSGF: false))
+//
         // end confusion
-        
     }
+    /**
+     * description: called when the view controller is loaded
+     **/
     override func viewDidLoad() {
         super.viewDidLoad()
+        OEPocketsphinxController.sharedInstance().requestMicPermission()
         loadOpenEars()
     }
+    /**
+     * description: called when the view controller is loaded
+     **/
     func startFlashingbutton() {
-        
         buttonFlashing = true
+        // how visible it is
         recordButton.alpha = 1
-        
         UIView.animate(withDuration: 0.5 , delay: 0.0, options: [UIViewAnimationOptions.curveEaseInOut,UIViewAnimationOptions.repeat, UIViewAnimationOptions.autoreverse, UIViewAnimationOptions.allowUserInteraction], animations: {
-            
             self.recordButton.alpha = 0.1
-            
             }, completion: {Bool in
         })
     }
+    /**
+     * description: stop flashing button
+     **/
     func stopFlashingbutton() {
-        
         buttonFlashing = false
-        
         UIView.animate(withDuration: 0.1, delay: 0.0, options: [UIViewAnimationOptions.curveEaseInOut, UIViewAnimationOptions.beginFromCurrentState], animations: {
-            
             self.recordButton.alpha = 1
-            
             }, completion: {Bool in
         })
     }
+    /**
+     * description: turn on the API
+     **/
     func startListening() {
-        
         do{
             try OEPocketsphinxController.sharedInstance().setActive(true)
         }
         catch{
-            //print("bleh")
+           //  print("error")
         }
-        
         OEPocketsphinxController.sharedInstance().startListeningWithLanguageModel(atPath: lmPath, dictionaryAtPath: dicPath, acousticModelAtPath: OEAcousticModel.path(toModel: "AcousticModelEnglish"), languageModelIsJSGF: false)
     }
-    
+    /**
+     * description: turn off the API
+     **/
     func stopListening() {
         OEPocketsphinxController.sharedInstance().stopListening()
     }
+    /**
+     * description: when the user presses the record button
+     **/
     @IBAction func record(_ sender: AnyObject) {
-        print("button press")
-        
-        if !buttonFlashing {
-            startFlashingbutton()
-           
-              startListening()
-           
+        // print("button press")
+        if(!buttonFlashing) {
+            self.startFlashingbutton()
+            self.startListening()
         }
         else {
             self.stopFlashingbutton()
@@ -208,9 +213,10 @@ class ViewController: UIViewController, OEEventsObserverDelegate {
         currentWord = words[randomWord]
     }
     /**
-     * ?????
+     * description: handle when there aren't the proper mic permissions
      **/
     func pocketsphinxFailedNoMicPermissions() {
+        statusTextView.text = "no mic permissions"
         self.startupFailedDueToLackOfPermissions = true
         // Stop listening if we are listening
         if (OEPocketsphinxController.sharedInstance()).isListening {
@@ -224,7 +230,9 @@ class ViewController: UIViewController, OEEventsObserverDelegate {
      * note: is a delegate method of OEEventsObserver
      **/
     func pocketsphinxDidReceiveHypothesis(_ hypothesis: String!, recognitionScore: String!, utteranceID: String!) {
-        
         heardTextView.text = "Heard: \(hypothesis)"
+    }
+    func micPermissionCheckCompleted(_ result: Bool){
+        statusTextView.text = "results"
     }
 }
