@@ -7,47 +7,85 @@
 import UIKit
 import CoreBluetooth
 
-var currentWord: String!
+
 class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManagerDelegate,CBPeripheralDelegate {
+    
+   
+    
+    // speech recognition fields
+    
     /**
-     * keeps you continuously updated about the status of your listening sesion
+     * object keeps you continuously updated about the status of your listening sesion
      **/
-    var openEarsEventsObserver: OEEventsObserver! // forced unwrapping
-    var startupFailedDueToLackOfPermissions: Bool = false;
-    var buttonFlashing: Bool = false
-    var words: Array<String> = []
+    private var openEarsEventsObserver: OEEventsObserver! // forced unwrapping
+    /**
+     * true if there are no microphone permissions
+     */
+    private var startupFailedDueToLackOfPermissions: Bool = false;
+    /**
+     * true if the mic button is flashing
+     */
+    private var buttonFlashing: Bool = false
+    /**
+     * holds list of words that open ears will interpret
+     **/
+    private var words: Array<String> = []
     /**
      * path to language model which holds the words
      **/
-    var lmPath: String!
+    private var lmPath: String!
     /**
      * path to dictionary which holds the words
      **/
-    var dicPath: String!
+    private var dicPath: String!
     /**
-     * the record button
+     * the record button in the storyboard
      **/
-    @IBOutlet weak var recordButton: UIButton!
+    // note: IBOutlet attribute means that the property is accessible to the storyboard
+    @IBOutlet private weak var recordButton: UIButton!
     /**
-     * text view that displays the text that the speech recoginition API interprets
+     * text view (in the storyboard) that displays the text that the speech recoginition
+     * API interprets
      **/
-    @IBOutlet weak var heardTextView: UITextView!
+    @IBOutlet private weak var heardTextView: UITextView!
     /**
-     *  text view that displays the status of the speech recognition API
+     *  text view (in the storyboard) that displays the status of the speech recognition API
      **/
     @IBOutlet weak var statusTextView: UITextView!
+    
+    
+    // bluetooth fields
+    
+    /**
+     * text view to display status of bluetooth
+     * data
+     **/
+     @IBOutlet weak var bluetoothTextView: UITextView!
+    
+    /**
+     * object that are used to manage discovered or connected remote
+     * peripheral devices (represened by CBPeripheral objects), including scanning for,
+     * discovering and connecting to advertising perpherals
+     **/
+    private var centralManager: CBCentralManager!
+    /**
+     * object represents remote peripheral devices that your app - by means of a central manager 
+     * - has discovered
+     **/
+    private var discoveredPeripheral: CBPeripheral!
+    /**
+     * stored the incoming data sent by the peripheral
+     **/
+    private let data: NSMutableData = NSMutableData()
+    
+    // speech recognition functions
+    
     /**
      * description: adding words to the language model
      **/
-    
-    // bluetooth data
-    private var centralManager: CBCentralManager!
-    private var discoveredPeripheral: CBPeripheral!
-    
-    // And somewhere to store the incoming data
-    private let data = NSMutableData()
     func addWords() {
-        // add anything here that you want to be recognized. Must be in capital letters
+        // add anything here that you want to be recognized. 
+        // must be in capital letters
         words.append("SUNDAY")
         words.append("MONDAY")
         words.append("TUESDAY")
@@ -90,13 +128,14 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
      **/
     override func viewDidLoad() {
         super.viewDidLoad()
-        OEPocketsphinxController.sharedInstance().requestMicPermission()
-        // Start up the CBCentralManager
+        // start up the CBCentralManager
         centralManager = CBCentralManager(delegate: self, queue: nil)
+        // configure speech recongition
+        OEPocketsphinxController.sharedInstance().requestMicPermission()
         loadOpenEars()
     }
     /**
-     * description: called when the view controller is loaded
+     * description: flashed recordButton
      **/
     func startFlashingbutton() {
         buttonFlashing = true
@@ -125,7 +164,7 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
             try OEPocketsphinxController.sharedInstance().setActive(true)
         }
         catch{
-           //  print("error")
+            statusTextView.text = "error in startListening"
         }
         OEPocketsphinxController.sharedInstance().startListeningWithLanguageModel(atPath: lmPath, dictionaryAtPath: dicPath, acousticModelAtPath: OEAcousticModel.path(toModel: "AcousticModelEnglish"), languageModelIsJSGF: false)
     }
@@ -138,8 +177,7 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
     /**
      * description: when the user presses the record button
      **/
-    @IBAction func record(_ sender: AnyObject) {
-        // print("button press")
+    @IBAction func record(sender: AnyObject) {
         if(!buttonFlashing) {
             self.startFlashingbutton()
             self.startListening()
@@ -209,11 +247,8 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
     func testRecognitionCompleted() {
             statusTextView.text = "A test file that was submitted for recognition is now complete."
     }
-    func getNewWord() {
-        let randomWord = Int(arc4random_uniform(UInt32(words.count)))
-        currentWord = words[randomWord]
-    }
     /**
+     * note: is a delegate method of OEEventsObserver
      * description: handle when there aren't the proper mic permissions
      **/
     func pocketsphinxFailedNoMicPermissions() {
@@ -234,45 +269,47 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
         heardTextView.text = "Heard: \(hypothesis)"
     }
     func micPermissionCheckCompleted(_ result: Bool){
-        statusTextView.text = "results"
+        statusTextView.text = "results \(result)"
     }
     
-    /** centralManagerDidUpdateState is a required protocol method.
-     *  Usually, you'd check for other states to make sure the current device supports LE, is powered on,
-     *  etc.
-     *  In this instance, we're just using it to wait for CBCentralManagerStatePoweredOn, which indicates
-     *  the Central is ready to be used.
-     * notes: check if phone is ready to use bluetooth
+    // blue tooth functions 
+    
+    
+    /** 
+     * notes: centralManagerDidUpdateState is a required protocol method.
+     * Usually, you'd check for other states to make sure the current device supports LE, is 
+     * powered on, etc.
+     * In this instance, we're just using it to wait for CBCentralManagerStatePoweredOn, 
+     * which indicates the Central is ready to be used.
+     * defintion: check if phone is ready to use bluetooth
      */
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        print("\(#line) \(#function)")
         // if bluetooth is not ready on phone
         guard central.state  == .poweredOn else {
             // In a real app, you'd deal with all the states correctly
             return
         }
-        
         // The state must be CBCentralManagerStatePoweredOn...
         // ... so start scanning
         scan()
     }
-    
-    /** 
-     * Scan for peripherals - specifically for our service's 128bit CBUUID
+    /**
+     * description: scan for peripherals - specifically for our service's 128bit CBUUID
      */
     func scan() {
-        
-        centralManager?.scanForPeripherals(
+        centralManager.scanForPeripherals(
             withServices: [transferServiceUUID], options: [
                 CBCentralManagerScanOptionAllowDuplicatesKey : NSNumber(value: true)
             ]
         )
-        
-        print("Scanning started")
+        bluetoothTextView.text = "scanning"
     }
-    /** This callback comes whenever a peripheral that is advertising the TRANSFER_SERVICE_UUID is discovered.
-     *  We check the RSSI, to make sure it's close enough that we're interested in it, and if it is,
-     *  we start the connection process
+    /** 
+     * note: CBCentralManagerDelegate method
+     * description: This callback comes whenever a peripheral that is advertising the 
+     * TRANSFER_SERVICE_UUID is discovered.
+     * We check the RSSI, to make sure it's close enough that we're interested in it, and if it
+     * is, we start the connection process
      */
     func centralManager(_: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi: NSNumber) {
         
