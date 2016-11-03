@@ -52,6 +52,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         1. ECE Office
         2. Professor Kuhl's Office
         3. 4th Floor Bathroom
+     
+     armond git test
     --------------------------------*/
     
     var selectedDestination = 1;
