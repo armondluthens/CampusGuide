@@ -143,251 +143,100 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 if (selectedDestination == 1){
                     currentDirections = "You are at the ECE office!"
                 }
-                else if (selectedDestination == 2){
-                    if(secondClosest != w2){
-                        currentDirections = "Turn around and proceed the opposite way"
+                else {
+                    if(currentHeading < 140.0){
+                        currentDirections = "Turn in place to your right"
+                    }
+                    else if(currentHeading > 200.0){
+                        currentDirections = "Turn in place to your left"
                     }
                     else{
-                        currentDirections = "Proceed toward the stairwell"
+                        currentDirections = "Proceed Straight"
                     }
                 }
-                else{
-                    if(secondClosest != w2){
-                        currentDirections = "Turn around and proceed the opposite way"
-                    }
-                    else{
-                        currentDirections = "Proceed toward the stairwell"
-                    }
-                }
-                //pastLocation = 1
             }
                 
             //You are closest to Worksation 2
             else if(closest == w2){
                 if (selectedDestination == 1){
-                    currentDirections = "Turn around and proceed forward"
-
-                }
-                else if (selectedDestination == 2){
-                    currentDirections = "Turn right and proceed forward"
+                    if(currentHeading > 160.0 && currentHeading < 320.0){
+                        currentDirections = "Stop. Turn in place to your right"
+                    }
+                    else if(currentHeading <= 160.0 && currentHeading > 20.0){
+                        currentDirections = "Stop. Turn in place to your left"
+                    }
+                    else{
+                        currentDirections = "Proceed Forward"
+                    }
                 }
                 else{
-                    currentDirections = "Turn right and proceed forward"
-                }
-
-            /* orientation problems
- 
-                //starting point
-                if(pastLocation == 0){
-                    
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn right and proceed forward"
+                    if(currentHeading < 230.0){
+                        currentDirections = "Stop. Turn in place to your right"
                     }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Continue forward"
+                    else if(currentHeading > 290.0){
+                        currentDirections = "Stop. Turn in place to your left"
                     }
                     else{
-                        currentDirections = "Continue forward"
-                    }
-                
-                }
-                //coming from ECE office
-                else if(pastLocation == 1){
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Turn right and proceed forward"
-                    }
-                    else{
-                        currentDirections = "Turn right and proceed forward"
-
+                        currentDirections = "Proceed Forward"
                     }
                 }
-                //coming from hallway
-                else{
-                    if (selectedDestination == 1){
-                        //turn left and walk straight
-                        currentDirections = "Turn left and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        //turn around and walk straight
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else{
-                        //turn around and walk straight
-                        currentDirections = "Turn around and walk straight"
-                    }
-
-                }
-                //pastLocation = 2
-            */
             }
                 
-            //You are closest to Worksation 3
             else if(closest == w3){
+                currentDirections = "no reading"
+                /*
                 if (selectedDestination == 1){
-                    currentDirections = "Turn around and proceed forward"
                     
                 }
-                else if (selectedDestination == 2){
-                    currentDirections = "Continue forward"
-                }
                 else{
-                    currentDirections = "Continue forward"
+                    if(currentHeading < 230.0){
+                        currentDirections = "Stop. Turn in place to your right"
+                    }
+                    else if(currentHeading > 270.0){
+                        currentDirections = "Stop. Turn in place to your left"
+                    }
+                    else{
+                        currentDirections = "Proceed Forward"
+                    }
+
                 }
+                */
                 
-                /* orientation problems
- 
-                if(pastLocation == 0){
-                    if (selectedDestination == 1){
-                    }
-                    else if (selectedDestination == 2){
-                    }
-                    else{
-                    }
-                }
-                //coming from stairs
-                else if(pastLocation == 2){
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Continue forward"
-                    }
-                    else{
-                        currentDirections = "Continue forward"
-                    }
-                }
-                //coming from hallway
-                else{
-                    if (selectedDestination == 1){
-                        currentDirections = "Continue forward"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else{
-                        currentDirections = "Turn around and walk straight"
-                    }
-                }
-                //pastLocation = 3
-            */
             }
-                
-            //You are closest to Worksation 4
+
             else if(closest == w4){
+                currentDirections = "no reading"
+                /*
                 if (selectedDestination == 1){
-                    currentDirections = "Turn around and proceed forward"
                     
                 }
                 else if (selectedDestination == 2){
                     currentDirections = "You have reached Professor Kuhl's Office"
                 }
                 else{
-                    currentDirections = "Continue forward"
-                }
-
-                
-                /*
-                if(pastLocation == 0){
-                 
-                    if (selectedDestination == 1){
-                    }
-                    else if (selectedDestination == 2){
-                    }
-                    else{
-                    }
-                }
-                //coming from ECE office direction
-                else if(pastLocation == 3){
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "You have reached Professor Kuhl's Office!"
-                    }
-                    else{
-                        currentDirections = "Continue forward"
-                    }
-                }
-                //coming from hallway opposite ECE office
-                else{
-                    if (selectedDestination == 1){
-                        currentDirections = "Continue forward"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "You have reached Professor Kuhl's Office!"                    }
-                    else{
-                        currentDirections = "Turn around and walk straight"
-                    }
                     
                 }
-                pastLocation = 4
                 */
             }
-            
             else if(closest == w5){
+                currentDirections = "no reading"
+                /*
                 if (selectedDestination == 1){
-                    currentDirections = "Turn around and proceed forward"
                     
                 }
                 else if (selectedDestination == 2){
-                    currentDirections = "Turn around and proceed forward"
+                    
                 }
                 else{
-                    currentDirections = "Turn left"
+                    
                 }
-                /*
-                if(pastLocation == 0){
-                    if (selectedDestination == 1){
-                    }
-                    else if (selectedDestination == 2){
-                    }
-                    else{
-                    }
-                }
-                    //coming from ECE office direction
-                else if(pastLocation == 4){
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else{
-                        currentDirections = "Turn left and walk straight"
-                    }
-                }
-                //coming from bathroom
-                else{
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn right and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Turn right and walk straight"                   }
-                    else{
-                        currentDirections = "Turn around and walk straight"
-                    }
-                }
-                pastLocation = 5
-            */
+                */
             }
 
-            //COMPASS STUFF
-            /*
-            currentHeading = newHeading.magneticHeading
-            let headingString:String = String(currentHeading)
-            print("CURRENT HEADING: " + headingString)
-            //self.closestWorkstation.text = headingString
-            //print(newHeading.magneticHeading)
-            */
-            
-            //self.view.backgroundColor = self.colors[closestBeacon.minor.intValue]
-            //self.closestWorkstation.text = self.workstation[nextClosest]
-            
+            //print the beacon you are closest to
             self.text.text = self.workstation[closestBeacon.minor.intValue]
-            //self.closestWorkstation.text = self.workstation[secondClosestBeacon.minor.intValue]
+            
+            //provide current directions to user
             self.directionsMessage.text = currentDirections
             
         }
@@ -396,8 +245,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading!) {
         currentHeading = newHeading.magneticHeading
-        //print(currentHeading)
-        
         let headingString:String = String(currentHeading)
         self.closestWorkstation.text = headingString
     }
