@@ -13,6 +13,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
    
     let locationManager = CLLocationManager()
+    //let compassLocationManager = CLLocationManager()
+    
     let region = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")! as UUID, identifier: "Estimotes")
     
     let colors = [
@@ -46,6 +48,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var displaySelectDestination: UILabel!
     
     var pastLocation = 0
+    
+    var currentHeading:Double = 0.0
 
     /*--------------------------------
         Destination Options:
@@ -82,6 +86,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             locationManager.requestWhenInUseAuthorization()
         }
         locationManager.startRangingBeacons(in: region)
+        
+        //COMPASS HEADING STUFF
+        
+        //compassLocationManager.delegate = self
+        
+        locationManager.startUpdatingHeading()
     }
 
     override func didReceiveMemoryWarning() {
@@ -364,21 +374,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             */
             }
 
-            
+            //COMPASS STUFF
+            /*
+            currentHeading = newHeading.magneticHeading
+            let headingString:String = String(currentHeading)
+            print("CURRENT HEADING: " + headingString)
+            //self.closestWorkstation.text = headingString
+            //print(newHeading.magneticHeading)
+            */
             
             //self.view.backgroundColor = self.colors[closestBeacon.minor.intValue]
             //self.closestWorkstation.text = self.workstation[nextClosest]
             
             self.text.text = self.workstation[closestBeacon.minor.intValue]
-            self.closestWorkstation.text = self.workstation[secondClosestBeacon.minor.intValue]
-            
-            
+            //self.closestWorkstation.text = self.workstation[secondClosestBeacon.minor.intValue]
             self.directionsMessage.text = currentDirections
             
         }
         
     }
 
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading!) {
+        currentHeading = newHeading.magneticHeading
+        //print(currentHeading)
+        
+        let headingString:String = String(currentHeading)
+        self.closestWorkstation.text = headingString
+    }
     
     
 }
