@@ -11,28 +11,12 @@ import CoreLocation
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
-   
+    /*----------------------------------------------------------------
+        Define Delegates
+     ----------------------------------------------------------------*/
     let locationManager = CLLocationManager()
-    //let compassLocationManager = CLLocationManager()
-    
     let region = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")! as UUID, identifier: "Estimotes")
     
-    let colors = [
-        //purple --> estimote beacon: blueberry1
-        62098: UIColor(red: 84/255, green: 77/255, blue: 160/255, alpha: 1),
-        
-        //green --> estimote beacon: mint1
-        73: UIColor(red: 162/255, green: 213/255, blue: 181/255, alpha: 1),
-        
-        //? --> estimote beacon: mint
-        4053: UIColor(red: 100/255, green: 100/255, blue: 100/255, alpha: 1),
-        
-        //? --> estimote beacon: blueberry
-        28583: UIColor(red: 75/255, green: 175/255, blue: 125/255, alpha: 1),
-        
-        //? --> estimote beacon: ice
-        43767: UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
-    ]
     
     let workstation = [
         62098: "Workstation 1",
@@ -42,26 +26,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         43767: "Workstation 5"
     ]
     
+    /*----------------------------------------------------------------
+        Define Global Variables
+    ----------------------------------------------------------------*/
     @IBOutlet weak var text: UILabel!
     @IBOutlet weak var closestWorkstation: UILabel!
     @IBOutlet weak var directionsMessage: UILabel!
     @IBOutlet weak var displaySelectDestination: UILabel!
     
-    var pastLocation = 0
-    
     var currentHeading:Double = 0.0
+    var selectedDestination = 1;
 
-    /*--------------------------------
-        Destination Options:
+    /*----------------------------------------------------------------
+     UI Button Action Methods:
+     
+     Destination Options:
         1. ECE Office
         2. Professor Kuhl's Office
         3. 4th Floor Bathroom
-     
-     armond git test
-    --------------------------------*/
-    
-    var selectedDestination = 1;
-    
+    ----------------------------------------------------------------*/
     @IBAction func ece(_ sender: AnyObject) {
         selectedDestination = 1
     }
@@ -74,42 +57,39 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         selectedDestination = 3
     }
     
-    
 
-    var destinationList = ["Workstation 2", "Workstation 3", "Workstation 4", "Workstation 5"]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
         locationManager.delegate = self;
         if (CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse) {
             locationManager.requestWhenInUseAuthorization()
         }
-        locationManager.startRangingBeacons(in: region)
-        
-        //COMPASS HEADING STUFF
-        
-        //compassLocationManager.delegate = self
-        
-        locationManager.startUpdatingHeading()
+        locationManager.startRangingBeacons(in: region) //start ranging beacons with location delegate
+        locationManager.startUpdatingHeading() //start getting compass heading with location delegate
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
-
+        
         let w1 = 62098
         let w2 = 73
         let w3 = 4053
         let w4 = 28583
         let w5 = 43767
+        let w6 = 49435
+        
+        //let commandLeft = "Stop. Turn in place to your left"
+        //let commandRight = "Stop. Turn in place to your right"
+        //let commandStraight = "Proceed Forward"
+        //let commandDestination = "You have reached your destination"
 
         var closest=0
-        var secondClosest=0
+        //var secondClosest=0
         var currentDirections=""
         var curDes=""
         
@@ -119,12 +99,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if (knownBeacons.count > 0) {
             
             let closestBeacon = knownBeacons[0] as CLBeacon
-            let secondClosestBeacon = knownBeacons[1] as CLBeacon
             closest = closestBeacon.minor.intValue
-            secondClosest = secondClosestBeacon.minor.intValue
             
+            //let secondClosestBeacon = knownBeacons[1] as CLBeacon
+            //secondClosest = secondClosestBeacon.minor.intValue
             
-
             if(selectedDestination == 1){
                 curDes = "Selected Destination: ECE Office"
             }
@@ -141,16 +120,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             if(closest == w1){
                 
                 if (selectedDestination == 1){
+                    //commandDestination
                     currentDirections = "You are at the ECE office!"
                 }
                 else {
                     if(currentHeading < 140.0){
+                        //commandRight
                         currentDirections = "Turn in place to your right"
                     }
                     else if(currentHeading > 200.0){
+                        //commandLeft
                         currentDirections = "Turn in place to your left"
                     }
                     else{
+                        //commandStraight
                         currentDirections = "Proceed Straight"
                     }
                 }
@@ -160,77 +143,160 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             else if(closest == w2){
                 if (selectedDestination == 1){
                     if(currentHeading > 160.0 && currentHeading < 320.0){
+                        //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                     }
                     else if(currentHeading <= 160.0 && currentHeading > 20.0){
+                        //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                     }
                     else{
+                        //commandStraight
                         currentDirections = "Proceed Forward"
                     }
                 }
                 else{
                     if(currentHeading < 230.0){
+                        //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                     }
                     else if(currentHeading > 290.0){
+                        //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                     }
                     else{
+                        //commandStraight
                         currentDirections = "Proceed Forward"
                     }
                 }
             }
-                
+            
+            //You are closest to Worksation 3
             else if(closest == w3){
-                currentDirections = "no reading"
-                /*
                 if (selectedDestination == 1){
-                    
+                    //ideal range: 50 deg - 110 deg
+                    if(currentHeading < 50){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                    }
+                    else if(currentHeading > 110){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                    }
                 }
                 else{
                     if(currentHeading < 230.0){
+                        //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                     }
-                    else if(currentHeading > 270.0){
+                    else if(currentHeading > 290.0){
+                        //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                     }
                     else{
+                        //commandStraight
                         currentDirections = "Proceed Forward"
                     }
-
                 }
-                */
-                
             }
-
+            
+            //You are closest to Worksation 4
             else if(closest == w4){
-                currentDirections = "no reading"
-                /*
                 if (selectedDestination == 1){
-                    
+                    //ideal range: 50 deg - 110 deg
+                    if(currentHeading < 50){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                    }
+                    else if(currentHeading > 110){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                    }
                 }
                 else if (selectedDestination == 2){
+                    //commandDestination
                     currentDirections = "You have reached Professor Kuhl's Office"
                 }
                 else{
-                    
+                    if(currentHeading < 230.0){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                    }
+                    else if(currentHeading > 290.0){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                    }
                 }
-                */
             }
+            
+            //You are closest to Worksation 5
             else if(closest == w5){
-                currentDirections = "no reading"
-                /*
-                if (selectedDestination == 1){
-                    
+                //ideal range: 50 deg - 110 deg
+                if (selectedDestination == 1 || selectedDestination == 2){
+                    if(currentHeading < 50){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                    }
+                    else if(currentHeading > 110){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                    }
                 }
-                else if (selectedDestination == 2){
-                    
-                }
+                //ideal range: 140 deg - 200 deg
                 else{
-                    
+                    if(currentHeading < 140){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                    }
+                    else if(currentHeading > 200){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                    }
                 }
-                */
+            }
+            
+            //You are closest to Worksation 6
+            else if(closest == w6){
+                 if (selectedDestination == 1 || selectedDestination == 2){
+                    //ideal range: 320 deg to 20 deg
+                    if(currentHeading < 170 && currentHeading > 20){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                    }
+                    else if(currentHeading >= 170 && currentHeading < 320){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                    }
+                 }
+                 else{
+                    //commandDestination
+                    currentDirections = "You have reached the bathroom"
+                 }
+                
             }
 
             //print the beacon you are closest to
