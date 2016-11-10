@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import AVFoundation
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
@@ -16,6 +17,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
      ----------------------------------------------------------------*/
     let locationManager = CLLocationManager()
     let region = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")! as UUID, identifier: "Estimotes")
+    
     
     
     let workstation = [
@@ -36,6 +38,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var currentHeading:Double = 0.0
     var selectedDestination = 1;
+    
+    var commandLeftCount = 0
+    var commandRightCount = 0
+    var commandStraightCount = 0
+    var ECEcount = 0
+    var KuhlCount = 0
+    var restroomCount = 0
+    
 
     /*----------------------------------------------------------------
      UI Button Action Methods:
@@ -83,9 +93,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         let w5 = 43767
         let w6 = 49435
         
-        //let commandLeft = "Stop. Turn in place to your left"
-        //let commandRight = "Stop. Turn in place to your right"
-        //let commandStraight = "Proceed Forward"
+        let commandLeft = "Stop. Turn in place to your left"
+        let commandRight = "Stop. Turn in place to your right"
+        let commandStraight = "Proceed Forward"
         //let commandDestination = "You have reached your destination"
 
         var closest=0
@@ -122,19 +132,27 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 if (selectedDestination == 1){
                     //commandDestination
                     currentDirections = "You are at the ECE office!"
+                    if(ECEcount == 0){
+                        textToSpeech(wordsToSay: "You are at the ECE office!")
+                        ECEcount=ECEcount + 1
+                    }
+                    
                 }
                 else {
                     if(currentHeading < 140.0){
                         //commandRight
                         currentDirections = "Turn in place to your right"
+                        textToSpeech(wordsToSay: commandRight)
                     }
                     else if(currentHeading > 200.0){
                         //commandLeft
                         currentDirections = "Turn in place to your left"
+                        textToSpeech(wordsToSay: commandLeft)
                     }
                     else{
                         //commandStraight
                         currentDirections = "Proceed Straight"
+                        textToSpeech(wordsToSay: commandStraight)
                     }
                 }
             }
@@ -313,6 +331,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         currentHeading = newHeading.magneticHeading
         let headingString:String = String(currentHeading)
         self.closestWorkstation.text = headingString
+    }
+    
+    func textToSpeech(wordsToSay: String) {
+        let synth = AVSpeechSynthesizer()
+        var myUtterance = AVSpeechUtterance(string: "")
+        myUtterance = AVSpeechUtterance(string: wordsToSay)
+        myUtterance.rate = 0.3
+        synth.speak(myUtterance)
     }
     
     
