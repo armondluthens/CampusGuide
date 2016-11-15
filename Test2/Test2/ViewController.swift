@@ -139,12 +139,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             //You are closest to Workstation 1
             if(closest == w1){
-                
+                textToSpeech(wordsToSay: "Beacon One")
                 if (selectedDestination == 1){
                     //commandDestination
                     currentDirections = "You are at the ECE office!"
                     if(lastVoiceCommand != 4){
-                        textToSpeech(wordsToSay: "You are at the ECE office!")
+                        //textToSpeech(wordsToSay: "You are at the ECE office!")
                         lastVoiceCommand = 4
                     }
                     
@@ -154,7 +154,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandRight
                         currentDirections = "Turn in place to your right"
                         if(lastVoiceCommand != 2){
-                            textToSpeech(wordsToSay: "Turn in place to your right")
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
                         
@@ -163,7 +163,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandLeft
                         currentDirections = "Turn in place to your left"
                         if(lastVoiceCommand != 1){
-                            textToSpeech(wordsToSay: "Turn in place to your left")
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
                             lastVoiceCommand = 1
                         }
                         
@@ -172,7 +172,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandStraight
                         currentDirections = "Proceed Straight"
                         if(lastVoiceCommand != 3){
-                            textToSpeech(wordsToSay: commandStraight)
+                            //textToSpeech(wordsToSay: commandStraight)
                             lastVoiceCommand = 3
                         }
                         
@@ -182,12 +182,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 
             //You are closest to Worksation 2
             else if(closest == w2){
+                textToSpeech(wordsToSay: "Beacon Two")
                 if (selectedDestination == 1){
                     if(currentHeading > 160.0 && currentHeading < 320.0){
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                         if(lastVoiceCommand != 2){
-                            textToSpeech(wordsToSay: "Turn in place to your right")
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
 
@@ -196,13 +197,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                         if(lastVoiceCommand != 1){
-                            textToSpeech(wordsToSay: "Turn in place to your left")
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
                             lastVoiceCommand = 1
                         }
                     }
                     else{
                         //commandStraight
                         currentDirections = "Proceed Forward"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
+
                     }
                 }
                 else{
@@ -210,7 +216,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                         if(lastVoiceCommand != 2){
-                            textToSpeech(wordsToSay: "Turn in place to your right")
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
 
@@ -219,7 +225,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                         if(lastVoiceCommand != 1){
-                            textToSpeech(wordsToSay: "Turn in place to your left")
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
                             lastVoiceCommand = 1
                         }
                     }
@@ -227,7 +233,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandStraight
                         currentDirections = "Proceed Forward"
                         if(lastVoiceCommand != 3){
-                            textToSpeech(wordsToSay: commandStraight)
+                            //textToSpeech(wordsToSay: commandStraight)
                             lastVoiceCommand = 3
                         }
                     }
@@ -236,13 +242,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             //You are closest to Worksation 3
             else if(closest == w3){
+                textToSpeech(wordsToSay: "Beacon Three")
+                
                 if (selectedDestination == 1){
                     //ideal range: 50 deg - 110 deg
                     if(currentHeading < 50){
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                         if(lastVoiceCommand != 2){
-                            textToSpeech(wordsToSay: "Turn in place to your right")
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
                     }
@@ -250,7 +258,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                         if(lastVoiceCommand != 1){
-                            textToSpeech(wordsToSay: "Turn in place to your left")
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
                             lastVoiceCommand = 1
                         }
                     }
@@ -258,7 +266,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandStraight
                         currentDirections = "Proceed Forward"
                         if(lastVoiceCommand != 3){
-                            textToSpeech(wordsToSay: commandStraight)
+                            //textToSpeech(wordsToSay: commandStraight)
                             lastVoiceCommand = 3
                         }
                     }
@@ -268,7 +276,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                         if(lastVoiceCommand != 2){
-                            textToSpeech(wordsToSay: "Turn in place to your right")
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
                     }
@@ -276,7 +284,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                         if(lastVoiceCommand != 1){
-                            textToSpeech(wordsToSay: "Turn in place to your left")
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
                             lastVoiceCommand = 1
                         }
                     }
@@ -284,7 +292,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandStraight
                         currentDirections = "Proceed Forward"
                         if(lastVoiceCommand != 3){
-                            textToSpeech(wordsToSay: commandStraight)
+                            //textToSpeech(wordsToSay: commandStraight)
                             lastVoiceCommand = 3
                         }
                     }
@@ -293,13 +301,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             //You are closest to Worksation 4
             else if(closest == w4){
+                textToSpeech(wordsToSay: "Beacon Four")
+                
                 if (selectedDestination == 1){
                     //ideal range: 50 deg - 110 deg
                     if(currentHeading < 50){
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                         if(lastVoiceCommand != 2){
-                            textToSpeech(wordsToSay: "Turn in place to your right")
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
                     }
@@ -307,7 +317,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                         if(lastVoiceCommand != 1){
-                            textToSpeech(wordsToSay: "Turn in place to your left")
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
                             lastVoiceCommand = 1
                         }
                     }
@@ -315,7 +325,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandStraight
                         currentDirections = "Proceed Forward"
                         if(lastVoiceCommand != 3){
-                            textToSpeech(wordsToSay: commandStraight)
+                            //textToSpeech(wordsToSay: commandStraight)
                             lastVoiceCommand = 3
                         }
                     }
@@ -324,7 +334,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     //commandDestination
                     currentDirections = "You have reached Professor Kuhl's Office"
                     if(lastVoiceCommand != 5){
-                        textToSpeech(wordsToSay: "You are at the Professor Kuhl's office!")
+                        //textToSpeech(wordsToSay: "You are at the Professor Kuhl's office!")
                         lastVoiceCommand = 5
                     }
                 }
@@ -333,7 +343,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                         if(lastVoiceCommand != 2){
-                            textToSpeech(wordsToSay: "Turn in place to your right")
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
                     }
@@ -341,7 +351,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                         if(lastVoiceCommand != 1){
-                            textToSpeech(wordsToSay: "Turn in place to your left")
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
                             lastVoiceCommand = 1
                         }
                     }
@@ -349,7 +359,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandStraight
                         currentDirections = "Proceed Forward"
                         if(lastVoiceCommand != 3){
-                            textToSpeech(wordsToSay: commandStraight)
+                            //textToSpeech(wordsToSay: commandStraight)
                             lastVoiceCommand = 3
                         }
                     }
@@ -358,13 +368,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             //You are closest to Worksation 5
             else if(closest == w5){
+                textToSpeech(wordsToSay: "Beacon Five")
+                
                 //ideal range: 50 deg - 110 deg
                 if (selectedDestination == 1 || selectedDestination == 2){
                     if(currentHeading < 50){
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                         if(lastVoiceCommand != 2){
-                            textToSpeech(wordsToSay: "Turn in place to your right")
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
                     }
@@ -372,7 +384,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                         if(lastVoiceCommand != 1){
-                            textToSpeech(wordsToSay: "Turn in place to your left")
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
                             lastVoiceCommand = 1
                         }
                     }
@@ -380,7 +392,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandStraight
                         currentDirections = "Proceed Forward"
                         if(lastVoiceCommand != 3){
-                            textToSpeech(wordsToSay: commandStraight)
+                            //textToSpeech(wordsToSay: commandStraight)
                             lastVoiceCommand = 3
                         }
                     }
@@ -391,7 +403,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                         if(lastVoiceCommand != 2){
-                            textToSpeech(wordsToSay: "Turn in place to your right")
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
                     }
@@ -399,7 +411,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                         if(lastVoiceCommand != 1){
-                            textToSpeech(wordsToSay: "Turn in place to your left")
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
                             lastVoiceCommand = 1
                         }
                     }
@@ -407,7 +419,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandStraight
                         currentDirections = "Proceed Forward"
                         if(lastVoiceCommand != 3){
-                            textToSpeech(wordsToSay: commandStraight)
+                            //textToSpeech(wordsToSay: commandStraight)
                             lastVoiceCommand = 3
                         }
                     }
@@ -416,13 +428,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             //You are closest to Worksation 6
             else if(closest == w6){
+                textToSpeech(wordsToSay: "Beacon Six")
                  if (selectedDestination == 1 || selectedDestination == 2){
                     //ideal range: 320 deg to 20 deg
                     if(currentHeading < 170 && currentHeading > 20){
                         //commandLeft
                         currentDirections = "Stop. Turn in place to your left"
                         if(lastVoiceCommand != 1){
-                            textToSpeech(wordsToSay: "Turn in place to your left")
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
                             lastVoiceCommand = 1
                         }
                     }
@@ -430,7 +443,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
                         if(lastVoiceCommand != 2){
-                            textToSpeech(wordsToSay: "Turn in place to your right")
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
                     }
@@ -438,7 +451,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         //commandStraight
                         currentDirections = "Proceed Forward"
                         if(lastVoiceCommand != 3){
-                            textToSpeech(wordsToSay: commandStraight)
+                            //textToSpeech(wordsToSay: commandStraight)
                             lastVoiceCommand = 3
                         }
                     }
@@ -447,7 +460,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     //commandDestination
                     currentDirections = "You have reached the bathroom"
                     if(lastVoiceCommand != 6){
-                        textToSpeech(wordsToSay: "You have reached the restroom!")
+                        //textToSpeech(wordsToSay: "You have reached the restroom!")
                         lastVoiceCommand = 6
                     }
                  }
