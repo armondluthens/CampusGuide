@@ -8,29 +8,17 @@
 
 import UIKit
 import CoreLocation
+import AVFoundation
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
-   
+    /*----------------------------------------------------------------
+        Define Delegates
+     ----------------------------------------------------------------*/
     let locationManager = CLLocationManager()
     let region = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")! as UUID, identifier: "Estimotes")
     
-    let colors = [
-        //purple --> estimote beacon: blueberry1
-        62098: UIColor(red: 84/255, green: 77/255, blue: 160/255, alpha: 1),
-        
-        //green --> estimote beacon: mint1
-        73: UIColor(red: 162/255, green: 213/255, blue: 181/255, alpha: 1),
-        
-        //? --> estimote beacon: mint
-        4053: UIColor(red: 100/255, green: 100/255, blue: 100/255, alpha: 1),
-        
-        //? --> estimote beacon: blueberry
-        28583: UIColor(red: 75/255, green: 175/255, blue: 125/255, alpha: 1),
-        
-        //? --> estimote beacon: ice
-        43767: UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
-    ]
+    
     
     let workstation = [
         62098: "Workstation 1",
@@ -40,22 +28,34 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         43767: "Workstation 5"
     ]
     
+    /*----------------------------------------------------------------
+        Define Global Variables
+    ----------------------------------------------------------------*/
     @IBOutlet weak var text: UILabel!
     @IBOutlet weak var closestWorkstation: UILabel!
     @IBOutlet weak var directionsMessage: UILabel!
     @IBOutlet weak var displaySelectDestination: UILabel!
     
-    var pastLocation = 0
+    var currentHeading:Double = 0.0
+    var selectedDestination = 1;
+    
+    var commandLeftCount = 0
+    var commandRightCount = 0
+    var commandStraightCount = 0
+    var ECEcount = 0
+    var KuhlCount = 0
+    var restroomCount = 0
+    
+    var lastVoiceCommand = 0
 
-    /*--------------------------------
-        Destination Options:
+    /*----------------------------------------------------------------
+     UI Button Action Methods:
+     
+     Destination Options:
         1. ECE Office
         2. Professor Kuhl's Office
         3. 4th Floor Bathroom
-    --------------------------------*/
-    
-    var selectedDestination = 1;
-    
+    ----------------------------------------------------------------*/
     @IBAction func ece(_ sender: AnyObject) {
         selectedDestination = 1
     }
@@ -68,36 +68,39 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         selectedDestination = 3
     }
     
-    
 
-    var destinationList = ["Workstation 2", "Workstation 3", "Workstation 4", "Workstation 5"]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
         locationManager.delegate = self;
         if (CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse) {
             locationManager.requestWhenInUseAuthorization()
         }
-        locationManager.startRangingBeacons(in: region)
+        locationManager.startRangingBeacons(in: region) //start ranging beacons with location delegate
+        locationManager.startUpdatingHeading() //start getting compass heading with location delegate
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
-
+        
         let w1 = 62098
         let w2 = 73
         let w3 = 4053
         let w4 = 28583
         let w5 = 43767
+        let w6 = 49435
+        
+        let commandLeft = "Stop. Turn in place to your left"
+        let commandRight = "Stop. Turn in place to your right"
+        let commandStraight = "Proceed Forward"
+        //let commandDestination = "You have reached your destination"
 
         var closest=0
-        var secondClosest=0
+        //var secondClosest=0
         var currentDirections=""
         var curDes=""
         
@@ -107,12 +110,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if (knownBeacons.count > 0) {
             
             let closestBeacon = knownBeacons[0] as CLBeacon
-            let secondClosestBeacon = knownBeacons[1] as CLBeacon
             closest = closestBeacon.minor.intValue
-            secondClosest = secondClosestBeacon.minor.intValue
             
+            //let secondClosestBeacon = knownBeacons[1] as CLBeacon
+            //secondClosest = secondClosestBeacon.minor.intValue
             
-
             if(selectedDestination == 1){
                 curDes = "Selected Destination: ECE Office"
             }
@@ -124,259 +126,370 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             }
             self.displaySelectDestination.text = curDes
             
+            /*
+                Commands:
+                1. Turn Left
+                2. Turn Right
+                3. Straight
+                4. ECE Office
+                5. Kuhl's Office
+                6. Bathroom
+             
+             */
             
             //You are closest to Workstation 1
             if(closest == w1){
-                
+                textToSpeech(wordsToSay: "Beacon One")
                 if (selectedDestination == 1){
+                    //commandDestination
                     currentDirections = "You are at the ECE office!"
+                    if(lastVoiceCommand != 4){
+                        //textToSpeech(wordsToSay: "You are at the ECE office!")
+                        lastVoiceCommand = 4
+                    }
+                    
                 }
-                else if (selectedDestination == 2){
-                    if(secondClosest != w2){
-                        currentDirections = "Turn around and proceed the opposite way"
+                else {
+                    if(currentHeading < 140.0){
+                        //commandRight
+                        currentDirections = "Turn in place to your right"
+                        if(lastVoiceCommand != 2){
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
+                            lastVoiceCommand = 2
+                        }
+                        
+                    }
+                    else if(currentHeading > 200.0){
+                        //commandLeft
+                        currentDirections = "Turn in place to your left"
+                        if(lastVoiceCommand != 1){
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
+                            lastVoiceCommand = 1
+                        }
+                        
                     }
                     else{
-                        currentDirections = "Proceed toward the stairwell"
+                        //commandStraight
+                        currentDirections = "Proceed Straight"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
+                        
                     }
                 }
-                else{
-                    if(secondClosest != w2){
-                        currentDirections = "Turn around and proceed the opposite way"
-                    }
-                    else{
-                        currentDirections = "Proceed toward the stairwell"
-                    }
-                }
-                //pastLocation = 1
             }
                 
             //You are closest to Worksation 2
             else if(closest == w2){
+                textToSpeech(wordsToSay: "Beacon Two")
                 if (selectedDestination == 1){
-                    currentDirections = "Turn around and proceed forward"
+                    if(currentHeading > 160.0 && currentHeading < 320.0){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                        if(lastVoiceCommand != 2){
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
+                            lastVoiceCommand = 2
+                        }
 
-                }
-                else if (selectedDestination == 2){
-                    currentDirections = "Turn right and proceed forward"
+                    }
+                    else if(currentHeading <= 160.0 && currentHeading > 20.0){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                        if(lastVoiceCommand != 1){
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
+                            lastVoiceCommand = 1
+                        }
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
+
+                    }
                 }
                 else{
-                    currentDirections = "Turn right and proceed forward"
-                }
-
-            /* orientation problems
- 
-                //starting point
-                if(pastLocation == 0){
-                    
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn right and proceed forward"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Continue forward"
-                    }
-                    else{
-                        currentDirections = "Continue forward"
-                    }
-                
-                }
-                //coming from ECE office
-                else if(pastLocation == 1){
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Turn right and proceed forward"
-                    }
-                    else{
-                        currentDirections = "Turn right and proceed forward"
+                    if(currentHeading < 230.0){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                        if(lastVoiceCommand != 2){
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
+                            lastVoiceCommand = 2
+                        }
 
                     }
-                }
-                //coming from hallway
-                else{
-                    if (selectedDestination == 1){
-                        //turn left and walk straight
-                        currentDirections = "Turn left and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        //turn around and walk straight
-                        currentDirections = "Turn around and walk straight"
+                    else if(currentHeading > 290.0){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                        if(lastVoiceCommand != 1){
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
+                            lastVoiceCommand = 1
+                        }
                     }
                     else{
-                        //turn around and walk straight
-                        currentDirections = "Turn around and walk straight"
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
                     }
-
                 }
-                //pastLocation = 2
-            */
             }
-                
+            
             //You are closest to Worksation 3
             else if(closest == w3){
+                textToSpeech(wordsToSay: "Beacon Three")
+                
                 if (selectedDestination == 1){
-                    currentDirections = "Turn around and proceed forward"
-                    
-                }
-                else if (selectedDestination == 2){
-                    currentDirections = "Continue forward"
+                    //ideal range: 50 deg - 110 deg
+                    if(currentHeading < 50){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                        if(lastVoiceCommand != 2){
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
+                            lastVoiceCommand = 2
+                        }
+                    }
+                    else if(currentHeading > 110){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                        if(lastVoiceCommand != 1){
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
+                            lastVoiceCommand = 1
+                        }
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
+                    }
                 }
                 else{
-                    currentDirections = "Continue forward"
-                }
-                
-                /* orientation problems
- 
-                if(pastLocation == 0){
-                    if (selectedDestination == 1){
+                    if(currentHeading < 230.0){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                        if(lastVoiceCommand != 2){
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
+                            lastVoiceCommand = 2
+                        }
                     }
-                    else if (selectedDestination == 2){
-                    }
-                    else{
-                    }
-                }
-                //coming from stairs
-                else if(pastLocation == 2){
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Continue forward"
+                    else if(currentHeading > 290.0){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                        if(lastVoiceCommand != 1){
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
+                            lastVoiceCommand = 1
+                        }
                     }
                     else{
-                        currentDirections = "Continue forward"
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
                     }
                 }
-                //coming from hallway
-                else{
-                    if (selectedDestination == 1){
-                        currentDirections = "Continue forward"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else{
-                        currentDirections = "Turn around and walk straight"
-                    }
-                }
-                //pastLocation = 3
-            */
             }
-                
+            
             //You are closest to Worksation 4
             else if(closest == w4){
-                if (selectedDestination == 1){
-                    currentDirections = "Turn around and proceed forward"
-                    
-                }
-                else if (selectedDestination == 2){
-                    currentDirections = "You have reached Professor Kuhl's Office"
-                }
-                else{
-                    currentDirections = "Continue forward"
-                }
-
+                textToSpeech(wordsToSay: "Beacon Four")
                 
-                /*
-                if(pastLocation == 0){
-                 
-                    if (selectedDestination == 1){
-                    }
-                    else if (selectedDestination == 2){
-                    }
-                    else{
-                    }
-                }
-                //coming from ECE office direction
-                else if(pastLocation == 3){
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "You have reached Professor Kuhl's Office!"
-                    }
-                    else{
-                        currentDirections = "Continue forward"
-                    }
-                }
-                //coming from hallway opposite ECE office
-                else{
-                    if (selectedDestination == 1){
-                        currentDirections = "Continue forward"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "You have reached Professor Kuhl's Office!"                    }
-                    else{
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    
-                }
-                pastLocation = 4
-                */
-            }
-            
-            else if(closest == w5){
                 if (selectedDestination == 1){
-                    currentDirections = "Turn around and proceed forward"
-                    
+                    //ideal range: 50 deg - 110 deg
+                    if(currentHeading < 50){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                        if(lastVoiceCommand != 2){
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
+                            lastVoiceCommand = 2
+                        }
+                    }
+                    else if(currentHeading > 110){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                        if(lastVoiceCommand != 1){
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
+                            lastVoiceCommand = 1
+                        }
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
+                    }
                 }
                 else if (selectedDestination == 2){
-                    currentDirections = "Turn around and proceed forward"
+                    //commandDestination
+                    currentDirections = "You have reached Professor Kuhl's Office"
+                    if(lastVoiceCommand != 5){
+                        //textToSpeech(wordsToSay: "You are at the Professor Kuhl's office!")
+                        lastVoiceCommand = 5
+                    }
                 }
                 else{
-                    currentDirections = "Turn left"
-                }
-                /*
-                if(pastLocation == 0){
-                    if (selectedDestination == 1){
+                    if(currentHeading < 230.0){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                        if(lastVoiceCommand != 2){
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
+                            lastVoiceCommand = 2
+                        }
                     }
-                    else if (selectedDestination == 2){
-                    }
-                    else{
-                    }
-                }
-                    //coming from ECE office direction
-                else if(pastLocation == 4){
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn around and walk straight"
-                    }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Turn around and walk straight"
+                    else if(currentHeading > 290.0){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                        if(lastVoiceCommand != 1){
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
+                            lastVoiceCommand = 1
+                        }
                     }
                     else{
-                        currentDirections = "Turn left and walk straight"
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
                     }
                 }
-                //coming from bathroom
+            }
+            
+            //You are closest to Worksation 5
+            else if(closest == w5){
+                textToSpeech(wordsToSay: "Beacon Five")
+                
+                //ideal range: 50 deg - 110 deg
+                if (selectedDestination == 1 || selectedDestination == 2){
+                    if(currentHeading < 50){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                        if(lastVoiceCommand != 2){
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
+                            lastVoiceCommand = 2
+                        }
+                    }
+                    else if(currentHeading > 110){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                        if(lastVoiceCommand != 1){
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
+                            lastVoiceCommand = 1
+                        }
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
+                    }
+                }
+                //ideal range: 140 deg - 200 deg
                 else{
-                    if (selectedDestination == 1){
-                        currentDirections = "Turn right and walk straight"
+                    if(currentHeading < 140){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                        if(lastVoiceCommand != 2){
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
+                            lastVoiceCommand = 2
+                        }
                     }
-                    else if (selectedDestination == 2){
-                        currentDirections = "Turn right and walk straight"                   }
+                    else if(currentHeading > 200){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                        if(lastVoiceCommand != 1){
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
+                            lastVoiceCommand = 1
+                        }
+                    }
                     else{
-                        currentDirections = "Turn around and walk straight"
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
                     }
                 }
-                pastLocation = 5
-            */
+            }
+            
+            //You are closest to Worksation 6
+            else if(closest == w6){
+                textToSpeech(wordsToSay: "Beacon Six")
+                 if (selectedDestination == 1 || selectedDestination == 2){
+                    //ideal range: 320 deg to 20 deg
+                    if(currentHeading < 170 && currentHeading > 20){
+                        //commandLeft
+                        currentDirections = "Stop. Turn in place to your left"
+                        if(lastVoiceCommand != 1){
+                            //textToSpeech(wordsToSay: "Turn in place to your left")
+                            lastVoiceCommand = 1
+                        }
+                    }
+                    else if(currentHeading >= 170 && currentHeading < 320){
+                        //commandRight
+                        currentDirections = "Stop. Turn in place to your right"
+                        if(lastVoiceCommand != 2){
+                            //textToSpeech(wordsToSay: "Turn in place to your right")
+                            lastVoiceCommand = 2
+                        }
+                    }
+                    else{
+                        //commandStraight
+                        currentDirections = "Proceed Forward"
+                        if(lastVoiceCommand != 3){
+                            //textToSpeech(wordsToSay: commandStraight)
+                            lastVoiceCommand = 3
+                        }
+                    }
+                 }
+                 else{
+                    //commandDestination
+                    currentDirections = "You have reached the bathroom"
+                    if(lastVoiceCommand != 6){
+                        //textToSpeech(wordsToSay: "You have reached the restroom!")
+                        lastVoiceCommand = 6
+                    }
+                 }
+                
             }
 
-            
-            
-            //self.view.backgroundColor = self.colors[closestBeacon.minor.intValue]
-            //self.closestWorkstation.text = self.workstation[nextClosest]
-            
+            //print the beacon you are closest to
             self.text.text = self.workstation[closestBeacon.minor.intValue]
-            self.closestWorkstation.text = self.workstation[secondClosestBeacon.minor.intValue]
             
-            
+            //provide current directions to user
             self.directionsMessage.text = currentDirections
             
         }
         
     }
 
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading!) {
+        currentHeading = newHeading.magneticHeading
+        let headingString:String = String(currentHeading)
+        self.closestWorkstation.text = headingString
+    }
+    
+    func textToSpeech(wordsToSay: String) {
+        let synth = AVSpeechSynthesizer()
+        var myUtterance = AVSpeechUtterance(string: "")
+        myUtterance = AVSpeechUtterance(string: wordsToSay)
+        myUtterance.rate = 0.3
+        synth.speak(myUtterance)
+    }
     
     
 }
