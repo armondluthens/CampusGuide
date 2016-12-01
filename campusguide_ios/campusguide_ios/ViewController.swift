@@ -34,7 +34,7 @@ class ViewController: UIViewController,UITextFieldDelegate  {
     // MARK: UITextFieldDelegate
     
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         
         // Hide the keyboard.
@@ -44,7 +44,7 @@ class ViewController: UIViewController,UITextFieldDelegate  {
     }
     
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         mealNameLabel.text = textField.text
     }
     
@@ -54,7 +54,7 @@ class ViewController: UIViewController,UITextFieldDelegate  {
     
     // MARK: Actions
 
-    @IBAction func etDefaultLabelText(sender: UIButton) {
+    @IBAction func etDefaultLabelText(_ sender: UIButton) {
         
         
         mealNameLabel.text = "Default Text"

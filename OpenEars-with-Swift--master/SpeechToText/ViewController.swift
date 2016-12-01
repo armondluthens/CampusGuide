@@ -6,6 +6,7 @@
 
 import UIKit
 import CoreBluetooth
+import AVFoundation
 
 
 class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManagerDelegate,CBPeripheralDelegate {
@@ -105,6 +106,13 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
         words.append("OCTOBER")
         words.append("NOVEMBER")
         words.append("DECEMBER")
+        
+        let synth = AVSpeechSynthesizer()
+        var myUtterance = AVSpeechUtterance(string: "")
+        myUtterance = AVSpeechUtterance(string: "test")
+        myUtterance.rate = 0.3
+        synth.speak(myUtterance)
+       
     }
     /**
      * description: instantiate API
@@ -282,7 +290,7 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
      * In this instance, we're just using it to wait for CBCentralManagerStatePoweredOn, 
      * which indicates the Central is ready to be used.
      * defintion: check if phone is ready to use bluetooth
-     */
+     **/
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         // if bluetooth is not ready on phone
         guard central.state  == .poweredOn else {
@@ -315,30 +323,22 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
         
         // Reject any where the value is above reasonable range
         // Reject if the signal strength is too low to be close enough (Close is around -22dB)
-        //        if  RSSI.integerValue < -15 && RSSI.integerValue > -35 {
-        //            println("Device not at correct range")
-        //            return
-        //        }
+        if  rssi.intValue < -15 && rssi.intValue > -35 {
+            return
+        }
         
         print("Discovered \(peripheral.name) at \(rssi)")
         
         // Ok, it's in range - have we already seen it?
-        
         if discoveredPeripheral != peripheral {
             // Save a local copy of the peripheral, so CoreBluetooth doesn't get rid of it
             discoveredPeripheral = peripheral
-            
-            // And connect
-            print("Connecting to peripheral \(peripheral)")
-            
             centralManager?.connect(peripheral, options: nil)
         }
     }
     /** If the connection fails for whatever reason, we need to deal with it.
      */
     func centralManager(_: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        print("Failed to connect to \(peripheral). (\(error!.localizedDescription))")
-        
         cleanup()
     }
     /** We've connected to the peripheral, now we need to discover the services and characteristics to find the 'transfer' characteristic.
@@ -409,19 +409,19 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
      */
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         guard error == nil else {
-            print("Error discovering services: \(error!.localizedDescription)")
+            // print("Error discovering services: \(error!.localizedDescription)")
             return
         }
         
         guard let stringFromData = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue) else {
-            print("Invalid data")
+            // print("Invalid data")
             return
         }
         
         // Have we got everything we need?
         if stringFromData.isEqual(to: "EOM") {
             // We have, so show the data,
-           //  textView.text = String(data: data.copy() as! NSData, encoding: NSUTF8StringEncoding)
+            bluetoothTextView.text = String(data: (data.copy() as! NSData) as Data, encoding: String.Encoding.utf8)
             
             // Cancel our subscription to the characteristic
             peripheral.setNotifyValue(false, for: characteristic)
@@ -433,8 +433,15 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
             data.append(characteristic.value!)
             
             // Log it
-            print("Received: \(stringFromData)")
+            // print("Received: \(stringFromData)")
         }
+    }
+    /**
+     * note: a part of CBPeripheralDelegate
+     * Invoked when you write data to a characteristic’s value
+     **/
+    func peripheral(_: CBPeripheral, didWriteValueFor: CBCharacteristic, error: Error?){
+         // probably won't need this
     }
     /** Once the disconnection happens, we need to clean up our local copy of the peripheral
      */
@@ -478,8 +485,19 @@ class ViewController: UIViewController, OEEventsObserverDelegate, CBCentralManag
     }
     private func cancelPeripheralConnection() {
         // If we've got this far, we're connected, but we're not subscribed, so we just disconnect
-        centralManager?.cancelPeripheralConnection(discoveredPeripheral!)
+        centralManager.cancelPeripheralConnection(discoveredPeripheral!)
     }
-
+    func writeToWearable() {
+        let str:String = "test"
+        let cStr = str.utf8CString
+        let char = (cStr[0])
+        let ptrToCStr:UnsafeMutablePointer<Int8> = UnsafeMutablePointer(bitPattern: Int(char))!
+        print(ptrToCStr)
+        let data: UnsafeMutableBufferPointer<Int8> = UnsafeMutableBufferPointer<Int8>(start: ptrToCStr, count: str.lengthOfBytes(using: String.Encoding.utf8))
+        print(data)
+        // sending the first characteristic for the first service
+        discoveredPeripheral.writeValue(Data(buffer: data), for: (discoveredPeripheral.services?[0].characteristics?[0])!, type: CBCharacteristicWriteType.withResponse)
+        
+    }
 
 }
