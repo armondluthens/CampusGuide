@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D9289D8A1DF34E380049E491 /* MyBluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9289D891DF34E380049E491 /* MyBluetooth.swift */; };
+		D9289D8C1DF34E870049E491 /* SpeechHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9289D8B1DF34E870049E491 /* SpeechHandler.swift */; };
+		D9289D8E1DF34EAF0049E491 /* MyLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9289D8D1DF34EAF0049E491 /* MyLocationManager.swift */; };
 		E536B8C51DA5CA4C004EB2E7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536B8C41DA5CA4C004EB2E7 /* AppDelegate.swift */; };
 		E536B8C71DA5CA4C004EB2E7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536B8C61DA5CA4C004EB2E7 /* ViewController.swift */; };
 		E536B8CA1DA5CA4C004EB2E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E536B8C81DA5CA4C004EB2E7 /* Main.storyboard */; };
@@ -17,6 +19,8 @@
 
 /* Begin PBXFileReference section */
 		D9289D891DF34E380049E491 /* MyBluetooth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBluetooth.swift; sourceTree = "<group>"; };
+		D9289D8B1DF34E870049E491 /* SpeechHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechHandler.swift; sourceTree = "<group>"; };
+		D9289D8D1DF34EAF0049E491 /* MyLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyLocationManager.swift; sourceTree = "<group>"; };
 		E536B8C11DA5CA4C004EB2E7 /* Test2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536B8C41DA5CA4C004EB2E7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E536B8C61DA5CA4C004EB2E7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +67,8 @@
 				E536B8CD1DA5CA4C004EB2E7 /* LaunchScreen.storyboard */,
 				E536B8D01DA5CA4C004EB2E7 /* Info.plist */,
 				D9289D891DF34E380049E491 /* MyBluetooth.swift */,
+				D9289D8B1DF34E870049E491 /* SpeechHandler.swift */,
+				D9289D8D1DF34EAF0049E491 /* MyLocationManager.swift */,
 			);
 			path = Test2;
 			sourceTree = "<group>";
@@ -140,6 +146,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9289D8C1DF34E870049E491 /* SpeechHandler.swift in Sources */,
+				D9289D8E1DF34EAF0049E491 /* MyLocationManager.swift in Sources */,
 				E536B8C71DA5CA4C004EB2E7 /* ViewController.swift in Sources */,
 				D9289D8A1DF34E380049E491 /* MyBluetooth.swift in Sources */,
 				E536B8C51DA5CA4C004EB2E7 /* AppDelegate.swift in Sources */,
