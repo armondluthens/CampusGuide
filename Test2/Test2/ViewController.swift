@@ -73,6 +73,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         
         locationManager.delegate = self;
+        
+        //CREATE BLUETOOTH OBJECT HERE
+        
+        
         if (CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse) {
             locationManager.requestWhenInUseAuthorization()
         }
@@ -164,6 +168,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         currentDirections = "Turn in place to your left"
                         if(lastVoiceCommand != 1){
                             //textToSpeech(wordsToSay: "Turn in place to your left")
+                            //bluetooth signal left
                             lastVoiceCommand = 1
                         }
                         
@@ -251,6 +256,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         currentDirections = "Stop. Turn in place to your right"
                         if(lastVoiceCommand != 2){
                             //textToSpeech(wordsToSay: "Turn in place to your right")
+                            
                             lastVoiceCommand = 2
                         }
                     }
