@@ -9,8 +9,9 @@
 import UIKit
 import CoreLocation
 import AVFoundation
+import CoreBluetooth
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothManager {
     
     /*----------------------------------------------------------------
         Define Delegates
@@ -72,6 +73,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        var bluetoothManager: MyBluetooth = MyBluetooth(delegate:self)
+        bluetoothManager.sendMessageToWearable(string: "A")
+        
         locationManager.delegate = self;
         
         //CREATE BLUETOOTH OBJECT HERE
@@ -108,6 +112,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         var currentDirections=""
         var curDes=""
         
+        var maxDegree = 0
+        var minDegree = 0
+
         print(beacons) //printing beacon info to console for testing
         
         let knownBeacons = beacons.filter{ $0.proximity != CLProximity.unknown }
@@ -144,6 +151,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             //You are closest to Workstation 1
             if(closest == w1){
                 textToSpeech(wordsToSay: "Beacon One")
+                
                 if (selectedDestination == 1){
                     //commandDestination
                     currentDirections = "You are at the ECE office!"
@@ -154,7 +162,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     
                 }
                 else {
-                    if(currentHeading < 140.0){
+                    if(currentHeading < 110.0){
                         //commandRight
                         currentDirections = "Turn in place to your right"
                         if(lastVoiceCommand != 2){
@@ -163,7 +171,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         }
                         
                     }
-                    else if(currentHeading > 200.0){
+                    else if(currentHeading > 260.0){
                         //commandLeft
                         currentDirections = "Turn in place to your left"
                         if(lastVoiceCommand != 1){
@@ -251,6 +259,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 
                 if (selectedDestination == 1){
                     //ideal range: 50 deg - 110 deg
+                    
                     if(currentHeading < 50){
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
@@ -499,38 +508,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
