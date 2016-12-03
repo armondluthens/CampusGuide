@@ -8,6 +8,6 @@
 
 import Foundation
 
-class ECEOfficeGuide : DestinationGuide, Guiding {
-    override func goToDesitation(startingPosition: Int){}
+class ECEOfficeGuide : DestinationGuide {
+    override func goToDesitation(closestBeacon: Int){}
 }

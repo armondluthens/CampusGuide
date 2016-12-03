@@ -65,10 +65,10 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate {
             else if(selectedDestination == MyLocations.Location.ECE_OFFICE){
                 destinationGuide = ECEOfficeGuide()
             }
-            else if(selectedDestination == MyLocations.Location.RESTROOM){
+            else if(selectedDestination == MyLocations.Location.BATHROOM){
                 destinationGuide = BathroomGuide()
             }
-            destinationGuide.goToDesitation(startingPosition: closest)
+            destinationGuide.goToDesitation(closestBeacon: closest)
         }
         
     }

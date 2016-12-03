@@ -8,6 +8,6 @@
 
 import Foundation
 
-class KuhlOfficeGuide : DestinationGuide, Guiding {
-    override func goToDesitation(startingPosition: Int){}
+class KuhlOfficeGuide : DestinationGuide {
+    override func goToDesitation(closestBeacon: Int){}
 }

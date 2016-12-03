@@ -8,19 +8,19 @@
 
 import Foundation
 
-protocol Guiding {
-    
-    func goToDesitation(startingPosition: Int)
-    
-    func moveUpOneBeacon(position: Int)
-    
-    func moveDownOneBeacon(position: Int)
-    
-}
+//protocol Guiding {
+//    
+//    func goToDesitation(startingPosition: Int)
+//    
+//    func moveUpOneBeacon(position: Int)
+//    
+//    func moveDownOneBeacon(position: Int)
+//    
+//}
 
 class DestinationGuide: NSObject {
     
-    func goToDesitation(startingPosition: Int){}
+    func goToDesitation(closestBeacon: Int){}
     
     func moveUpOneBeacon(position: Int){}
     

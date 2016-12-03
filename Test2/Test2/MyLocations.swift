@@ -10,5 +10,5 @@ import Foundation
 
 class MyLocations: NSObject {
     
-    enum Location{ case KUHL_OFFICE, ECE_OFFICE, RESTROOM }
+    enum Location{ case KUHL_OFFICE, ECE_OFFICE, BATHROOM }
 }

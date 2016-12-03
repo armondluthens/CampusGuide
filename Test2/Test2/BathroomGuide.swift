@@ -8,6 +8,6 @@
 
 import Foundation
 
-class BathroomGuide : DestinationGuide, Guiding {
-    override func goToDesitation(startingPosition: Int){}
+class BathroomGuide : DestinationGuide {
+    override func goToDesitation(closestBeacon: Int){}
 }
