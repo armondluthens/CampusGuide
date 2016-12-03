@@ -10,6 +10,11 @@
 		D9289D8A1DF34E380049E491 /* MyBluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9289D891DF34E380049E491 /* MyBluetooth.swift */; };
 		D9289D8C1DF34E870049E491 /* SpeechHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9289D8B1DF34E870049E491 /* SpeechHandler.swift */; };
 		D9289D8E1DF34EAF0049E491 /* MyLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9289D8D1DF34EAF0049E491 /* MyLocationManager.swift */; };
+		D9289D901DF34FA90049E491 /* MyLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9289D8F1DF34FA90049E491 /* MyLocations.swift */; };
+		D9A9A1FC1DF35B9600345E2A /* DestinationGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A9A1FB1DF35B9600345E2A /* DestinationGuide.swift */; };
+		D9A9A1FE1DF35FF700345E2A /* ECEOfficeGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A9A1FD1DF35FF700345E2A /* ECEOfficeGuide.swift */; };
+		D9A9A2001DF3602900345E2A /* KuhlOfficeGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A9A1FF1DF3602900345E2A /* KuhlOfficeGuide.swift */; };
+		D9A9A2021DF3604A00345E2A /* BathroomGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A9A2011DF3604A00345E2A /* BathroomGuide.swift */; };
 		E536B8C51DA5CA4C004EB2E7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536B8C41DA5CA4C004EB2E7 /* AppDelegate.swift */; };
 		E536B8C71DA5CA4C004EB2E7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536B8C61DA5CA4C004EB2E7 /* ViewController.swift */; };
 		E536B8CA1DA5CA4C004EB2E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E536B8C81DA5CA4C004EB2E7 /* Main.storyboard */; };
@@ -21,6 +26,11 @@
 		D9289D891DF34E380049E491 /* MyBluetooth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBluetooth.swift; sourceTree = "<group>"; };
 		D9289D8B1DF34E870049E491 /* SpeechHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechHandler.swift; sourceTree = "<group>"; };
 		D9289D8D1DF34EAF0049E491 /* MyLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyLocationManager.swift; sourceTree = "<group>"; };
+		D9289D8F1DF34FA90049E491 /* MyLocations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyLocations.swift; sourceTree = "<group>"; };
+		D9A9A1FB1DF35B9600345E2A /* DestinationGuide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestinationGuide.swift; sourceTree = "<group>"; };
+		D9A9A1FD1DF35FF700345E2A /* ECEOfficeGuide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECEOfficeGuide.swift; sourceTree = "<group>"; };
+		D9A9A1FF1DF3602900345E2A /* KuhlOfficeGuide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KuhlOfficeGuide.swift; sourceTree = "<group>"; };
+		D9A9A2011DF3604A00345E2A /* BathroomGuide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BathroomGuide.swift; sourceTree = "<group>"; };
 		E536B8C11DA5CA4C004EB2E7 /* Test2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536B8C41DA5CA4C004EB2E7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E536B8C61DA5CA4C004EB2E7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -69,6 +79,11 @@
 				D9289D891DF34E380049E491 /* MyBluetooth.swift */,
 				D9289D8B1DF34E870049E491 /* SpeechHandler.swift */,
 				D9289D8D1DF34EAF0049E491 /* MyLocationManager.swift */,
+				D9289D8F1DF34FA90049E491 /* MyLocations.swift */,
+				D9A9A1FB1DF35B9600345E2A /* DestinationGuide.swift */,
+				D9A9A1FD1DF35FF700345E2A /* ECEOfficeGuide.swift */,
+				D9A9A1FF1DF3602900345E2A /* KuhlOfficeGuide.swift */,
+				D9A9A2011DF3604A00345E2A /* BathroomGuide.swift */,
 			);
 			path = Test2;
 			sourceTree = "<group>";
@@ -100,7 +115,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = armondluthens;
 				TargetAttributes = {
 					E536B8C01DA5CA4C004EB2E7 = {
@@ -149,8 +164,13 @@
 				D9289D8C1DF34E870049E491 /* SpeechHandler.swift in Sources */,
 				D9289D8E1DF34EAF0049E491 /* MyLocationManager.swift in Sources */,
 				E536B8C71DA5CA4C004EB2E7 /* ViewController.swift in Sources */,
+				D9A9A1FC1DF35B9600345E2A /* DestinationGuide.swift in Sources */,
 				D9289D8A1DF34E380049E491 /* MyBluetooth.swift in Sources */,
+				D9289D901DF34FA90049E491 /* MyLocations.swift in Sources */,
+				D9A9A2021DF3604A00345E2A /* BathroomGuide.swift in Sources */,
+				D9A9A1FE1DF35FF700345E2A /* ECEOfficeGuide.swift in Sources */,
 				E536B8C51DA5CA4C004EB2E7 /* AppDelegate.swift in Sources */,
+				D9A9A2001DF3602900345E2A /* KuhlOfficeGuide.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +214,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -243,6 +264,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

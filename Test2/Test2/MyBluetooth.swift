@@ -6,7 +6,6 @@
 //  Copyright © 2016 FantasticFour. All rights reserved.
 //
 
-import Foundation
 import CoreBluetooth
 
 // make custom bluetooth protocol to handle connecting and
