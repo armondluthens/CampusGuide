@@ -9,7 +9,7 @@
 import Foundation
 import CoreLocation
 
-class MyLocationManager: NSObject, CLLocationManagerDelegate {
+class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     
     enum Beacon: Int {
         case ECE_OFFICE = 62098
@@ -19,6 +19,9 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate {
         case EAST_TINTERSECTION = 43767
         case BATHROOM = 49435
         
+    }
+    enum Direction {
+        case RIGHT, LEFT, UTURN, STRAIGHT, ARRIVED
     }
     // enum Position: Beacon{}
     
@@ -33,8 +36,6 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate {
     private var currentHeading: Double = 0.0
     
     private var selectedDestination: MyLocations.Location!
-    
-    private var destinationGuide: DestinationGuide!;
     
     init(destination: MyLocations.Location){
         
@@ -51,6 +52,8 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate {
         // start getting compass heading with location delegate
         locationManager.startUpdatingHeading()
     }
+    func reveiceNewCommand(command: MyLocationManager.Direction){
+    }
     // called when one or more beacons are in range
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         
@@ -61,13 +64,13 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate {
             let closest:Int = closestBeacon.minor.intValue
             
             if(selectedDestination == MyLocations.Location.KUHL_OFFICE){
-                destinationGuide = KuhlOfficeGuide()
+                destinationGuide = KuhlOfficeGuide(delegate: self)
             }
             else if(selectedDestination == MyLocations.Location.ECE_OFFICE){
-                destinationGuide = ECEOfficeGuide()
+                destinationGuide = ECEOfficeGuide(delegate: self)
             }
             else if(selectedDestination == MyLocations.Location.BATHROOM){
-                destinationGuide = BathroomGuide()
+                destinationGuide = BathroomGuide(delegate: self)
             }
             destinationGuide.goToDesitation(closestBeacon: closest)
         }

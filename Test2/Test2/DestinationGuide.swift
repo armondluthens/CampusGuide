@@ -7,9 +7,19 @@
 //
 
 
+var destinationGuide: DestinationGuide!
 
-
+protocol CommandReceiver {
+    
+    func reveiceNewCommand(command: MyLocationManager.Direction);
+}
 class DestinationGuide: NSObject {
+    
+    var delegate: CommandReceiver!
+    
+    init(delegate: CommandReceiver){
+        self.delegate = delegate
+    }
     
     func goToDesitation(closestBeacon: Int){}
     
@@ -86,10 +96,10 @@ class DestinationGuide: NSObject {
             turnRight()
         }
         else if(isFacingSouth()){
-            turnLeft()
+           turnLeft()
         }
         else if(isFacingEast()){
-            turnAround()
+           turnAround()
         }
         else if(isFacingWest()){
             moveStraight()
@@ -98,10 +108,23 @@ class DestinationGuide: NSObject {
             print("error determining orientation")
         }
     }
-    func turnRight(){}
-    func turnLeft(){}
-    func moveStraight(){}
-    func turnAround(){}
-    func arrived(){}
+    func turnRight() {
+        sendUpdatedCommand(myCommand: MyLocationManager.Direction.RIGHT)
+    }
+    func turnLeft() {
+        sendUpdatedCommand(myCommand: MyLocationManager.Direction.LEFT)
+    }
+    func moveStraight() {
+        sendUpdatedCommand(myCommand: MyLocationManager.Direction.STRAIGHT)
+    }
+    func turnAround() {
+        sendUpdatedCommand(myCommand: MyLocationManager.Direction.UTURN)
+    }
+    func arrived() {
+        sendUpdatedCommand(myCommand: MyLocationManager.Direction.ARRIVED)
+    }
+    func sendUpdatedCommand(myCommand: MyLocationManager.Direction){
+        delegate.reveiceNewCommand(command: myCommand)
+    }
     
 }
