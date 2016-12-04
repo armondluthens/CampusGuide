@@ -9,5 +9,19 @@
 import Foundation
 
 class ECEOfficeGuide : DestinationGuide {
-    override func goToDesitation(closestBeacon: Int){}
+    // function is only called if destination is determined and beacons are in range
+    override func goToDesitation(closestBeacon: Int){
+        
+        if(closestBeacon == MyLocationManager.Beacon.ECE_OFFICE.rawValue){
+            arrived()
+        }
+        else if(closestBeacon == MyLocationManager.Beacon.KUHL_OFFICE.rawValue || closestBeacon == MyLocationManager.Beacon.EAST_TINTERSECTION.rawValue || closestBeacon == MyLocationManager.Beacon.SMALL_HALL.rawValue){
+            moveWest()
+        }
+        else if(closestBeacon == MyLocationManager.Beacon.BATHROOM.rawValue || closestBeacon == MyLocationManager.Beacon.WEST_TINTERSECTION.rawValue) {
+            moveNorth()
+        }
+       
+    }
+
 }

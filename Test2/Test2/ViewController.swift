@@ -107,6 +107,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
         // Dispose of any resources that can be recreated.
     }
     
+    func navigate(){
+        
+    }
+    
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         
         let w1 = 62098

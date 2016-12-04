@@ -13,13 +13,14 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate {
     
     enum Beacon: Int {
         case ECE_OFFICE = 62098
-        case TWO = 73
-        case THREE = 4053
+        case WEST_TINTERSECTION = 73
+        case SMALL_HALL = 4053
         case KUHL_OFFICE = 28583
-        case FIVE = 43767
+        case EAST_TINTERSECTION = 43767
         case BATHROOM = 49435
         
     }
+    // enum Position: Beacon{}
     
     // core location manager
     private let locationManager: CLLocationManager = CLLocationManager()
