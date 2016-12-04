@@ -19,9 +19,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
     let locationManager = CLLocationManager()
     let region = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")! as UUID, identifier: "Estimotes")
    
-    
-    
-    
+
     let workstation = [
         62098: "Workstation 1",
         73: "Workstation 2",
@@ -507,13 +505,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
         }
         
     }
-
+    
+    
+    
+    
+    /******************************************************************************************
+                Compass Heading Function
+    ******************************************************************************************/
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         currentHeading = newHeading.magneticHeading
         let headingString:String = String(currentHeading)
         self.closestWorkstation.text = headingString
     }
-    // start getting compass heading with location delegate
+    
+    /******************************************************************************************
+                Speeech Function
+     ******************************************************************************************/
     func textToSpeech(wordsToSay: String) {
         let synth = AVSpeechSynthesizer()
         var myUtterance = AVSpeechUtterance(string: "")
