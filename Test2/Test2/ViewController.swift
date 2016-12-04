@@ -45,6 +45,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
     var ECEcount = 0
     var KuhlCount = 0
     var restroomCount = 0
+    var previousMessage=""
     
     
     var lastVoiceCommand = 0
@@ -93,20 +94,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
         speaker = Speaker()
         
 
-//        if (CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse) {
-//            locationManager.requestWhenInUseAuthorization()
-//        }
-//        // start ranging beacons with location delegate
-//        locationManager.startRangingBeacons(in: region)
-//        // start getting compass heading with location delegate
-//        locationManager.startUpdatingHeading()
+        if (CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse) {
+            locationManager.requestWhenInUseAuthorization()
+        }
+        // start ranging beacons with location delegate
+        locationManager.startRangingBeacons(in: region)
+        // start getting compass heading with location delegate
+        locationManager.startUpdatingHeading()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    /*
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         
         let w1 = 62098
@@ -505,9 +507,141 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
         }
         
     }
+    */
     
-    
-    
+    /******************************************************************************************
+                Navigation code WITHOUT COMPASS HEADING
+     ******************************************************************************************/
+    func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
+        
+        let w1 = 62098
+        let w2 = 73
+        let w3 = 4053
+        let w4 = 28583
+        let w5 = 43767
+        let w6 = 49435
+        
+        let commandLeft = "Turn left and proceed forward"
+        let commandRight = "Turn right and proceed forward"
+        let commandStraight = "Proceed Forward"
+        let commandDestination = "You have reached your destination"
+        let commandTurnAround = "Turn around and proceed forward"
+        
+        var closest=0
+        var currentDirections=""
+        var curDes=""
+        
+        let knownBeacons = beacons.filter{ $0.proximity != CLProximity.unknown }
+        if (knownBeacons.count > 0) {
+            
+            let closestBeacon = knownBeacons[0] as CLBeacon
+            closest = closestBeacon.minor.intValue
+            
+            if(selectedDestination == 1){
+                curDes = "Selected Destination: ECE Office"
+            }
+            else if(selectedDestination == 2){
+                curDes = "Selected Destination: Kuhl's Office"
+            }
+            else{
+                curDes = "Selected Destination: 4th Floor Bathroom"
+            }
+            self.displaySelectDestination.text = curDes
+            
+            //You are closest to Workstation 1
+            if(closest == w1){
+                if (selectedDestination == 1){
+                    currentDirections = commandDestination
+                    //call speech function
+                }
+                else{
+                    currentDirections = commandStraight
+                }
+            }
+                
+            //You are closest to Worksation 2
+            else if(closest == w2){
+                if (selectedDestination == 1){
+                    currentDirections = commandTurnAround
+                    //call speech function
+                }
+                else{
+                    currentDirections = commandRight
+                    //call speech function
+                }
+            }
+                
+            //You are closest to Worksation 3
+            else if(closest == w3){
+                if (selectedDestination == 1){
+                    currentDirections = commandTurnAround
+                    //call speech function
+                }
+                else{
+                    currentDirections = commandStraight
+                }
+            }
+                
+            //You are closest to Worksation 4
+            else if(closest == w4){
+                if (selectedDestination == 1){
+                    currentDirections = commandTurnAround
+                    //call speech function
+                }
+                else if(selectedDestination == 2){
+                    currentDirections = commandDestination
+                    //call speech function
+                }
+                else{
+                    currentDirections = commandStraight
+                    //call speech function
+                }
+            }
+                
+                //You are closest to Worksation 5
+            else if(closest == w5){
+                if (selectedDestination == 1){
+                    currentDirections = commandTurnAround
+                    //call speech function
+                }
+                else if(selectedDestination == 2){
+                    currentDirections = commandTurnAround
+                    //call speech function
+                }
+                else{
+                    currentDirections = commandLeft
+                    //call speech function
+                }
+            }
+                
+            //You are closest to Worksation 6
+            else if(closest == w6){
+                if (selectedDestination == 1){
+                    currentDirections = commandTurnAround
+                    //call speech function
+                }
+                else if(selectedDestination == 2){
+                    currentDirections = commandTurnAround
+                    //call speech function
+                }
+                else{
+                    currentDirections = commandDestination
+                    //call speech function
+                }
+            }
+            
+            //call speech function (currentDirections)
+            textToSpeech(wordsToSay: currentDirections)
+            //print the beacon you are closest to
+            self.text.text = self.workstation[closestBeacon.minor.intValue]
+            
+            //provide current directions to user
+            self.directionsMessage.text = currentDirections
+            
+        }
+        
+    }
+
     
     /******************************************************************************************
                 Compass Heading Function
@@ -526,7 +660,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
         var myUtterance = AVSpeechUtterance(string: "")
         myUtterance = AVSpeechUtterance(string: wordsToSay)
         myUtterance.rate = 0.3
-        synth.speak(myUtterance)
+        if(wordsToSay != previousMessage){
+            synth.speak(myUtterance)
+        }
+        previousMessage = wordsToSay
+        
     }
     
     

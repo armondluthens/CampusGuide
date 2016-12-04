@@ -123,7 +123,7 @@
 				TargetAttributes = {
 					E536B8C01DA5CA4C004EB2E7 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = KZDV9PZKMA;
+						DevelopmentTeam = 3FFT7J828B;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -289,7 +289,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = KZDV9PZKMA;
+				DEVELOPMENT_TEAM = 3FFT7J828B;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Framework",
@@ -297,7 +297,7 @@
 				INFOPLIST_FILE = Test2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.stephsmith.Test2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.armondluthens.Test2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Test2/Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -308,7 +308,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = KZDV9PZKMA;
+				DEVELOPMENT_TEAM = 3FFT7J828B;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Framework",
@@ -316,7 +316,7 @@
 				INFOPLIST_FILE = Test2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.stephsmith.Test2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.armondluthens.Test2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Test2/Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
