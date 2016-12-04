@@ -11,6 +11,9 @@
 		D9289D8C1DF34E870049E491 /* SpeechHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9289D8B1DF34E870049E491 /* SpeechHandler.swift */; };
 		D9289D8E1DF34EAF0049E491 /* MyLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9289D8D1DF34EAF0049E491 /* MyLocationManager.swift */; };
 		D9289D901DF34FA90049E491 /* MyLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9289D8F1DF34FA90049E491 /* MyLocations.swift */; };
+		D992D84F1DF49B1F0064DDF8 /* AcousticModelEnglish.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D992D84C1DF49B1F0064DDF8 /* AcousticModelEnglish.bundle */; };
+		D992D8501DF49B1F0064DDF8 /* OpenEars.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D992D84D1DF49B1F0064DDF8 /* OpenEars.framework */; };
+		D992D8511DF49B1F0064DDF8 /* Slt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D992D84E1DF49B1F0064DDF8 /* Slt.framework */; };
 		D9A9A1FC1DF35B9600345E2A /* DestinationGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A9A1FB1DF35B9600345E2A /* DestinationGuide.swift */; };
 		D9A9A1FE1DF35FF700345E2A /* ECEOfficeGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A9A1FD1DF35FF700345E2A /* ECEOfficeGuide.swift */; };
 		D9A9A2001DF3602900345E2A /* KuhlOfficeGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A9A1FF1DF3602900345E2A /* KuhlOfficeGuide.swift */; };
@@ -27,6 +30,10 @@
 		D9289D8B1DF34E870049E491 /* SpeechHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechHandler.swift; sourceTree = "<group>"; };
 		D9289D8D1DF34EAF0049E491 /* MyLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyLocationManager.swift; sourceTree = "<group>"; };
 		D9289D8F1DF34FA90049E491 /* MyLocations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyLocations.swift; sourceTree = "<group>"; };
+		D992D84A1DF499110064DDF8 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		D992D84C1DF49B1F0064DDF8 /* AcousticModelEnglish.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AcousticModelEnglish.bundle; sourceTree = "<group>"; };
+		D992D84D1DF49B1F0064DDF8 /* OpenEars.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenEars.framework; sourceTree = "<group>"; };
+		D992D84E1DF49B1F0064DDF8 /* Slt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Slt.framework; sourceTree = "<group>"; };
 		D9A9A1FB1DF35B9600345E2A /* DestinationGuide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestinationGuide.swift; sourceTree = "<group>"; };
 		D9A9A1FD1DF35FF700345E2A /* ECEOfficeGuide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECEOfficeGuide.swift; sourceTree = "<group>"; };
 		D9A9A1FF1DF3602900345E2A /* KuhlOfficeGuide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KuhlOfficeGuide.swift; sourceTree = "<group>"; };
@@ -45,15 +52,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D992D8511DF49B1F0064DDF8 /* Slt.framework in Frameworks */,
+				D992D8501DF49B1F0064DDF8 /* OpenEars.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D992D84B1DF49B1F0064DDF8 /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				D992D84C1DF49B1F0064DDF8 /* AcousticModelEnglish.bundle */,
+				D992D84D1DF49B1F0064DDF8 /* OpenEars.framework */,
+				D992D84E1DF49B1F0064DDF8 /* Slt.framework */,
+			);
+			path = Framework;
+			sourceTree = "<group>";
+		};
 		E536B8B81DA5CA4B004EB2E7 = {
 			isa = PBXGroup;
 			children = (
+				D992D84B1DF49B1F0064DDF8 /* Framework */,
 				E536B8C31DA5CA4C004EB2E7 /* Test2 */,
 				E536B8C21DA5CA4C004EB2E7 /* Products */,
 			);
@@ -84,6 +104,7 @@
 				D9A9A1FD1DF35FF700345E2A /* ECEOfficeGuide.swift */,
 				D9A9A1FF1DF3602900345E2A /* KuhlOfficeGuide.swift */,
 				D9A9A2011DF3604A00345E2A /* BathroomGuide.swift */,
+				D992D84A1DF499110064DDF8 /* Bridging-Header.h */,
 			);
 			path = Test2;
 			sourceTree = "<group>";
@@ -120,7 +141,7 @@
 				TargetAttributes = {
 					E536B8C01DA5CA4C004EB2E7 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 3FFT7J828B;
+						DevelopmentTeam = KZDV9PZKMA;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -149,6 +170,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E536B8CF1DA5CA4C004EB2E7 /* LaunchScreen.storyboard in Resources */,
+				D992D84F1DF49B1F0064DDF8 /* AcousticModelEnglish.bundle in Resources */,
 				E536B8CC1DA5CA4C004EB2E7 /* Assets.xcassets in Resources */,
 				E536B8CA1DA5CA4C004EB2E7 /* Main.storyboard in Resources */,
 			);
@@ -242,6 +264,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Test2/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -284,6 +307,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Test2/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -293,11 +317,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 3FFT7J828B;
+				DEVELOPMENT_TEAM = KZDV9PZKMA;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Framework",
+				);
 				INFOPLIST_FILE = Test2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.armondluthens.Test2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stephsmith.Test2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -307,11 +335,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 3FFT7J828B;
+				DEVELOPMENT_TEAM = KZDV9PZKMA;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Framework",
+				);
 				INFOPLIST_FILE = Test2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.armondluthens.Test2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stephsmith.Test2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

@@ -9,15 +9,15 @@
 import UIKit
 import CoreLocation
 import AVFoundation
+import CoreBluetooth
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothManager {
     
     /*----------------------------------------------------------------
-        Define Delegates
+     Define Delegates
      ----------------------------------------------------------------*/
     let locationManager = CLLocationManager()
     let region = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")! as UUID, identifier: "Estimotes")
-    
     
     
     let workstation = [
@@ -29,8 +29,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     ]
     
     /*----------------------------------------------------------------
-        Define Global Variables
-    ----------------------------------------------------------------*/
+     Define Global Variables
+     ----------------------------------------------------------------*/
     @IBOutlet weak var text: UILabel!
     @IBOutlet weak var closestWorkstation: UILabel!
     @IBOutlet weak var directionsMessage: UILabel!
@@ -46,49 +46,67 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var KuhlCount = 0
     var restroomCount = 0
     
+    
     var lastVoiceCommand = 0
-
+    
     /*----------------------------------------------------------------
      UI Button Action Methods:
      
      Destination Options:
-        1. ECE Office
-        2. Professor Kuhl's Office
-        3. 4th Floor Bathroom
-    ----------------------------------------------------------------*/
+     1. ECE Office
+     2. Professor Kuhl's Office
+     3. 4th Floor Bathroom
+     ----------------------------------------------------------------*/
     @IBAction func ece(_ sender: AnyObject) {
+        if(myBluetooth.isReady){
+            myBluetooth.sendMessageToWearable(string: "0")
+        }
         selectedDestination = 1
     }
     
     @IBAction func kuhl(_ sender: AnyObject) {
         selectedDestination = 2
+        print("in kuhl")
+        speaker.speak(wordsToSay: "test string")
     }
     
     @IBAction func restroom(_ sender: AnyObject) {
         selectedDestination = 3
     }
     
-
+    func failedToConnectToPeripheral(_ peripheral: CBPeripheral, error: NSError?) {
+        
+        directionsMessage.text = "error"
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // setting up region
+        self.region.notifyEntryStateOnDisplay = true
+        self.region.notifyOnEntry = true
+        self.region.notifyOnExit = true
+        
+        myBluetooth = MyBluetooth(delegate: self)
         locationManager.delegate = self;
         
-        //CREATE BLUETOOTH OBJECT HERE
+        speechRecognizer = SpeechRecognizer()
+        speaker = Speaker()
         
         
-        if (CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse) {
-            locationManager.requestWhenInUseAuthorization()
-        }
-        locationManager.startRangingBeacons(in: region) //start ranging beacons with location delegate
-        locationManager.startUpdatingHeading() //start getting compass heading with location delegate
+        //        if (CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse) {
+        //            locationManager.requestWhenInUseAuthorization()
+        //        }
+        //        // start ranging beacons with location delegate
+        //        locationManager.startRangingBeacons(in: region)
+        //        // start getting compass heading with location delegate
+        //        locationManager.startUpdatingHeading()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         
         let w1 = 62098
@@ -98,16 +116,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         let w5 = 43767
         let w6 = 49435
         
-        let commandLeft = "Stop. Turn in place to your left"
-        let commandRight = "Stop. Turn in place to your right"
-        let commandStraight = "Proceed Forward"
+        //        let commandLeft = "Stop. Turn in place to your left"
+        //        let commandRight = "Stop. Turn in place to your right"
+        //        let commandStraight = "Proceed Forward"
         //let commandDestination = "You have reached your destination"
-
+        
         var closest=0
         //var secondClosest=0
         var currentDirections=""
         var curDes=""
         
+        //        var maxDegree = 0
+        //        var minDegree = 0
+        //
         print(beacons) //printing beacon info to console for testing
         
         let knownBeacons = beacons.filter{ $0.proximity != CLProximity.unknown }
@@ -131,19 +152,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             self.displaySelectDestination.text = curDes
             
             /*
-                Commands:
-                1. Turn Left
-                2. Turn Right
-                3. Straight
-                4. ECE Office
-                5. Kuhl's Office
-                6. Bathroom
+             Commands:
+             1. Turn Left
+             2. Turn Right
+             3. Straight
+             4. ECE Office
+             5. Kuhl's Office
+             6. Bathroom
              
              */
             
             //You are closest to Workstation 1
             if(closest == w1){
                 textToSpeech(wordsToSay: "Beacon One")
+                
                 if (selectedDestination == 1){
                     //commandDestination
                     currentDirections = "You are at the ECE office!"
@@ -154,7 +176,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     
                 }
                 else {
-                    if(currentHeading < 140.0){
+                    if(currentHeading < 110.0){
                         //commandRight
                         currentDirections = "Turn in place to your right"
                         if(lastVoiceCommand != 2){
@@ -163,7 +185,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         }
                         
                     }
-                    else if(currentHeading > 200.0){
+                    else if(currentHeading > 260.0){
                         //commandLeft
                         currentDirections = "Turn in place to your left"
                         if(lastVoiceCommand != 1){
@@ -185,7 +207,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 }
             }
                 
-            //You are closest to Worksation 2
+                //You are closest to Worksation 2
             else if(closest == w2){
                 textToSpeech(wordsToSay: "Beacon Two")
                 if (selectedDestination == 1){
@@ -196,7 +218,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                             //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
-
+                        
                     }
                     else if(currentHeading <= 160.0 && currentHeading > 20.0){
                         //commandLeft
@@ -213,7 +235,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                             //textToSpeech(wordsToSay: commandStraight)
                             lastVoiceCommand = 3
                         }
-
+                        
                     }
                 }
                 else{
@@ -224,7 +246,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                             //textToSpeech(wordsToSay: "Turn in place to your right")
                             lastVoiceCommand = 2
                         }
-
+                        
                     }
                     else if(currentHeading > 290.0){
                         //commandLeft
@@ -244,13 +266,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     }
                 }
             }
-            
-            //You are closest to Worksation 3
+                
+                //You are closest to Worksation 3
             else if(closest == w3){
                 textToSpeech(wordsToSay: "Beacon Three")
                 
                 if (selectedDestination == 1){
                     //ideal range: 50 deg - 110 deg
+                    
                     if(currentHeading < 50){
                         //commandRight
                         currentDirections = "Stop. Turn in place to your right"
@@ -304,8 +327,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     }
                 }
             }
-            
-            //You are closest to Worksation 4
+                
+                //You are closest to Worksation 4
             else if(closest == w4){
                 textToSpeech(wordsToSay: "Beacon Four")
                 
@@ -371,8 +394,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     }
                 }
             }
-            
-            //You are closest to Worksation 5
+                
+                //You are closest to Worksation 5
             else if(closest == w5){
                 textToSpeech(wordsToSay: "Beacon Five")
                 
@@ -403,7 +426,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         }
                     }
                 }
-                //ideal range: 140 deg - 200 deg
+                    //ideal range: 140 deg - 200 deg
                 else{
                     if(currentHeading < 140){
                         //commandRight
@@ -431,11 +454,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     }
                 }
             }
-            
-            //You are closest to Worksation 6
+                
+                //You are closest to Worksation 6
             else if(closest == w6){
                 textToSpeech(wordsToSay: "Beacon Six")
-                 if (selectedDestination == 1 || selectedDestination == 2){
+                if (selectedDestination == 1 || selectedDestination == 2){
                     //ideal range: 320 deg to 20 deg
                     if(currentHeading < 170 && currentHeading > 20){
                         //commandLeft
@@ -461,18 +484,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                             lastVoiceCommand = 3
                         }
                     }
-                 }
-                 else{
+                }
+                else{
                     //commandDestination
                     currentDirections = "You have reached the bathroom"
                     if(lastVoiceCommand != 6){
                         //textToSpeech(wordsToSay: "You have reached the restroom!")
                         lastVoiceCommand = 6
                     }
-                 }
+                }
                 
             }
-
+            
             //print the beacon you are closest to
             self.text.text = self.workstation[closestBeacon.minor.intValue]
             
@@ -482,13 +505,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
         
     }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading!) {
+    
+    
+    
+    
+    /******************************************************************************************
+     Compass Heading Function
+     ******************************************************************************************/
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         currentHeading = newHeading.magneticHeading
         let headingString:String = String(currentHeading)
         self.closestWorkstation.text = headingString
     }
     
+    /******************************************************************************************
+     Speeech Function
+     ******************************************************************************************/
     func textToSpeech(wordsToSay: String) {
         let synth = AVSpeechSynthesizer()
         var myUtterance = AVSpeechUtterance(string: "")
@@ -499,51 +531,3 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
