@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D9D6AF191DF3CF2A0094299F /* SpeechHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D6AF181DF3CF2A0094299F /* SpeechHandler.swift */; };
+		D9D6AF1F1DF3CFDF0094299F /* AcousticModelEnglish.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D9D6AF1C1DF3CFDF0094299F /* AcousticModelEnglish.bundle */; };
+		D9D6AF201DF3CFDF0094299F /* OpenEars.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9D6AF1D1DF3CFDF0094299F /* OpenEars.framework */; };
+		D9D6AF211DF3CFDF0094299F /* Slt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9D6AF1E1DF3CFDF0094299F /* Slt.framework */; };
 		E536B8C51DA5CA4C004EB2E7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536B8C41DA5CA4C004EB2E7 /* AppDelegate.swift */; };
 		E536B8C71DA5CA4C004EB2E7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536B8C61DA5CA4C004EB2E7 /* ViewController.swift */; };
 		E536B8CA1DA5CA4C004EB2E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E536B8C81DA5CA4C004EB2E7 /* Main.storyboard */; };
@@ -16,6 +20,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D9D6AF181DF3CF2A0094299F /* SpeechHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechHandler.swift; sourceTree = "<group>"; };
+		D9D6AF1A1DF3CF800094299F /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		D9D6AF1C1DF3CFDF0094299F /* AcousticModelEnglish.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AcousticModelEnglish.bundle; sourceTree = "<group>"; };
+		D9D6AF1D1DF3CFDF0094299F /* OpenEars.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenEars.framework; sourceTree = "<group>"; };
+		D9D6AF1E1DF3CFDF0094299F /* Slt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Slt.framework; sourceTree = "<group>"; };
 		E536B8C11DA5CA4C004EB2E7 /* Test2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E536B8C41DA5CA4C004EB2E7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E536B8C61DA5CA4C004EB2E7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -31,15 +40,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9D6AF211DF3CFDF0094299F /* Slt.framework in Frameworks */,
+				D9D6AF201DF3CFDF0094299F /* OpenEars.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D9D6AF1B1DF3CFDF0094299F /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				D9D6AF1C1DF3CFDF0094299F /* AcousticModelEnglish.bundle */,
+				D9D6AF1D1DF3CFDF0094299F /* OpenEars.framework */,
+				D9D6AF1E1DF3CFDF0094299F /* Slt.framework */,
+			);
+			path = Framework;
+			sourceTree = "<group>";
+		};
 		E536B8B81DA5CA4B004EB2E7 = {
 			isa = PBXGroup;
 			children = (
+				D9D6AF1B1DF3CFDF0094299F /* Framework */,
 				E536B8C31DA5CA4C004EB2E7 /* Test2 */,
 				E536B8C21DA5CA4C004EB2E7 /* Products */,
 			);
@@ -63,6 +85,8 @@
 				E536B8CD1DA5CA4C004EB2E7 /* LaunchScreen.storyboard */,
 				E536B8D01DA5CA4C004EB2E7 /* Info.plist */,
 				E58BB37D1DF3791800904994 /* MyBluetooth.swift */,
+				D9D6AF181DF3CF2A0094299F /* SpeechHandler.swift */,
+				D9D6AF1A1DF3CF800094299F /* Bridging-Header.h */,
 			);
 			path = Test2;
 			sourceTree = "<group>";
@@ -128,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E536B8CF1DA5CA4C004EB2E7 /* LaunchScreen.storyboard in Resources */,
+				D9D6AF1F1DF3CFDF0094299F /* AcousticModelEnglish.bundle in Resources */,
 				E536B8CC1DA5CA4C004EB2E7 /* Assets.xcassets in Resources */,
 				E536B8CA1DA5CA4C004EB2E7 /* Main.storyboard in Resources */,
 			);
@@ -140,6 +165,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9D6AF191DF3CF2A0094299F /* SpeechHandler.swift in Sources */,
 				E536B8C71DA5CA4C004EB2E7 /* ViewController.swift in Sources */,
 				E58BB37E1DF3791800904994 /* MyBluetooth.swift in Sources */,
 				E536B8C51DA5CA4C004EB2E7 /* AppDelegate.swift in Sources */,
@@ -264,11 +290,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = KZDV9PZKMA;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Framework",
+				);
 				INFOPLIST_FILE = Test2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.stephsmith.Test2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Test2/Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -278,11 +309,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = KZDV9PZKMA;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Framework",
+				);
 				INFOPLIST_FILE = Test2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.stephsmith.Test2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Test2/Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
