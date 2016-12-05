@@ -40,14 +40,15 @@ class MyBluetooth: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     let SERVICE_UUID: CBUUID = CBUUID(string: "FFE0")
     let CHARACTERISTIC_UUID: CBUUID = CBUUID(string: "FFE1")
-    var writeType: CBCharacteristicWriteType = .withoutResponse
-    var scanStatus: Bool = false
-    var peripheralCount: Int = 0
+    private var writeType: CBCharacteristicWriteType = .withoutResponse
+    private var scanStatus: Bool = false
+    private var peripheralCount: Int = 0
     // optionals
-    var delegate: MyBluetoothManager!
-    var centralManager: CBCentralManager!
-    var peripheral: CBPeripheral!
-    var writeCharacteristic: CBCharacteristic!
+    private var delegate: MyBluetoothManager!
+    private var centralManager: CBCentralManager!
+    private var peripheral: CBPeripheral!
+    private var writeCharacteristic: CBCharacteristic!
+    
     // whether the phone and the bluetooth module is ready to send and receive data
     var isReady: Bool {
         get {

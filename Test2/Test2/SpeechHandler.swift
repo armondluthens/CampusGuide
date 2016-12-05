@@ -12,6 +12,9 @@ import AVFoundation
 var speechRecognizer: SpeechRecognizer!
 var speaker: Speaker!
 
+protocol DestinationRetriever {
+    func retrieveDestination(command: String)
+}
 
 class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
     
@@ -27,8 +30,12 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
      **/
     private var dicPath: String!
     
-    override init(){
+    private var delegate:DestinationRetriever!
+    
+    init(delegate: DestinationRetriever){
+        
         super.init()
+        self.delegate = delegate
         OEPocketsphinxController.sharedInstance().requestMicPermission()
         loadOpenEars()
     }
@@ -36,25 +43,9 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
     func createRecognizedWords(){
         // add anything here that you want to be recognized.
         // must be in capital letters
-        recognizedWords.append("SUNDAY")
-        recognizedWords.append("MONDAY")
-        recognizedWords.append("TUESDAY")
-        recognizedWords.append("WEDNESDAY")
-        recognizedWords.append("THURSDAY")
-        recognizedWords.append("FRIDAY")
-        recognizedWords.append("SATURDAY")
-        recognizedWords.append("JANUARY")
-        recognizedWords.append("FEBRUARY")
-        recognizedWords.append("MARCH")
-        recognizedWords.append("APRIL")
-        recognizedWords.append("MAY")
-        recognizedWords.append("JUNE")
-        recognizedWords.append("JULY")
-        recognizedWords.append("AUGUST")
-        recognizedWords.append("SEPTEMBER")
-        recognizedWords.append("OCTOBER")
-        recognizedWords.append("NOVEMBER")
-        recognizedWords.append("DECEMBER")
+        recognizedWords.append("KUHLS OFFICE")
+        recognizedWords.append("BATHROOM")
+        recognizedWords.append("E C E OFFICE")
         
     }
     /**
@@ -98,7 +89,10 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
      * note: is a delegate method of OEEventsObserver
      **/
     func pocketsphinxDidReceiveHypothesis(_ hypothesis: String!, recognitionScore: String!, utteranceID: String!) {
+        
         print("Heard: \(hypothesis)")
+        print("recognitionScore: \(recognitionScore)")
+        delegate.retrieveDestination(command: hypothesis)
     }
     /**
      * note: is a delegate method of OEEventsObserver
@@ -132,17 +126,16 @@ class Speaker: NSObject {
         myUtterance = AVSpeechUtterance(string: "")
         myUtterance.rate = 0.3
         
-        
     }
     
     func speak(wordsToSay: String) {
         
         prevWords = curWords
         curWords = wordsToSay
-        // if(prevWords != curWords){
-        myUtterance = AVSpeechUtterance(string: curWords)
-        synth.speak(myUtterance)
-        // }
+        if(prevWords != curWords){
+            myUtterance = AVSpeechUtterance(string: curWords)
+            synth.speak(myUtterance)
+        }
         
         
         

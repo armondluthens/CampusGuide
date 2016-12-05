@@ -7,15 +7,16 @@
 //
 
 
-var destinationGuide: DestinationGuide!
+weak var destinationGuide: DestinationGuide!
 
 protocol CommandReceiver {
     
     func reveiceNewCommand(command: MyLocationManager.Direction);
 }
+
 class DestinationGuide: NSObject {
     
-    var delegate: CommandReceiver!
+    private var delegate: CommandReceiver!
     
     init(delegate: CommandReceiver){
         self.delegate = delegate

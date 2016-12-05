@@ -9,6 +9,13 @@
 import Foundation
 import CoreLocation
 
+var myLocationManager: MyLocationManager!
+
+protocol NavigationInstructor{
+    
+    func receivedNewInstruction(command: String)
+}
+
 class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     
     enum Beacon: Int {
@@ -20,28 +27,41 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         case BATHROOM = 49435
         
     }
-    enum Direction {
-        case RIGHT, LEFT, UTURN, STRAIGHT, ARRIVED
+    enum Direction:Int {
+        case RIGHT = 0, LEFT, UTURN, STRAIGHT, ARRIVED
     }
-    // enum Position: Beacon{}
-    
+    var directions: Array<String> = ["TURN RIGHT", "TURN LEFT", "MAKE A U TURN", "MOVE STRAIGHT FORWARD", "YOU HAVE ARRIVED" ]
+   
     // core location manager
-    private let locationManager: CLLocationManager = CLLocationManager()
+    let locationManager: CLLocationManager = CLLocationManager()
     
     // region is based on that device's proximity to the bluetooth beacon
-    // QUESTION: does it matter which beacon?
-    private let region = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")! as UUID, identifier: "Estimotes")
+    let region = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")! as UUID, identifier: "Estimotes")
     
     // NOTE: might make this it's own object
     private var currentHeading: Double = 0.0
     
     private var selectedDestination: MyLocations.Location!
     
-    init(destination: MyLocations.Location){
+    var command: Direction!
+    private var delegate: NavigationInstructor!
+    
+    init(destination: MyLocations.Location, delegate: NavigationInstructor){
         
         super.init()
+        self.delegate = delegate
         selectedDestination = destination
         locationManager.delegate = self
+        
+        if(selectedDestination == MyLocations.Location.KUHL_OFFICE){
+            destinationGuide = KuhlOfficeGuide(delegate: self)
+        }
+        else if(selectedDestination == MyLocations.Location.ECE_OFFICE){
+            destinationGuide = ECEOfficeGuide(delegate: self)
+        }
+        else if(selectedDestination == MyLocations.Location.BATHROOM){
+            destinationGuide = BathroomGuide(delegate: self)
+        }
         
         // authorize location services if not authorized
         if(CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse){
@@ -53,6 +73,9 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         locationManager.startUpdatingHeading()
     }
     func reveiceNewCommand(command: MyLocationManager.Direction){
+        
+        delegate.receivedNewInstruction(command: directions[command.rawValue])
+        
     }
     // called when one or more beacons are in range
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
@@ -62,25 +85,11 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         {
             let closestBeacon = knownBeacons[0] as CLBeacon
             let closest:Int = closestBeacon.minor.intValue
-            
-            if(selectedDestination == MyLocations.Location.KUHL_OFFICE){
-                destinationGuide = KuhlOfficeGuide(delegate: self)
-            }
-            else if(selectedDestination == MyLocations.Location.ECE_OFFICE){
-                destinationGuide = ECEOfficeGuide(delegate: self)
-            }
-            else if(selectedDestination == MyLocations.Location.BATHROOM){
-                destinationGuide = BathroomGuide(delegate: self)
-            }
             destinationGuide.goToDesitation(closestBeacon: closest)
         }
         
     }
-    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {}
-    
-   
-    
-    
-    
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+    }
     
 }
