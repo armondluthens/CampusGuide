@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 import AVFoundation
 import CoreBluetooth
+import CoreMotion
 
 class ViewController: UIViewController, MyBluetoothManager, DestinationRetriever, NavigationInstructor {
     
@@ -21,6 +22,10 @@ class ViewController: UIViewController, MyBluetoothManager, DestinationRetriever
     @IBOutlet weak var closestWorkstation: UILabel!
     @IBOutlet weak var directionsMessage: UILabel!
     @IBOutlet weak var displaySelectDestination: UILabel!
+    
+    
+    // motion test
+    let motionManager: CMMotionManager = CMMotionManager()
     
     /*----------------------------------------------------------------
      UI Button Action Methods:
@@ -49,13 +54,23 @@ class ViewController: UIViewController, MyBluetoothManager, DestinationRetriever
         myBluetooth = MyBluetooth(delegate: self)
         speechRecognizer = SpeechRecognizer(delegate: self)
         speaker = Speaker()
+        
+        // motion test
+        if motionManager.isDeviceMotionAvailable {
+            motionManager.deviceMotionUpdateInterval = 0.5
+            motionManager.startDeviceMotionUpdates()
+        }
+    }
+    func printReadings(){
+       
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     func retrieveDestination(command: String){
-        print("commands: /()/"))
+        print("commands: \(command)")
         // myLocationManager = MyLocationManager(destination: MyLocations.Location.KUHL_OFFICE, delegate: self)
     }
     func receivedNewInstruction(command: String){

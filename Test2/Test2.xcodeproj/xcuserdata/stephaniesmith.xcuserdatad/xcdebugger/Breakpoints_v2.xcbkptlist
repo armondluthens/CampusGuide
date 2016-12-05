@@ -10,13 +10,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Test2/MyLocationManager.swift"
-            timestampString = "502484855.443563"
+            timestampString = "502592091.945989"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "11"
-            endingLineNumber = "11"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
             landmarkName = "MyLocationManager"
             landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Test2.MyLocationManager.__deallocating_deinit"
+                  moduleName = "Test2"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
+                  timestampString = "502592093.213971"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Test2.MyLocationManager.init () -&gt; Test2.MyLocationManager"
+                  moduleName = "Test2"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
+                  timestampString = "502592093.219511"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Test2.MyLocationManager.__allocating_init () -&gt; Test2.MyLocationManager"
+                  moduleName = "Test2"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
+                  timestampString = "502592093.221825"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -26,13 +73,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Test2/MyLocationManager.swift"
-            timestampString = "502485188.305159"
+            timestampString = "502592091.945989"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "15"
-            endingLineNumber = "15"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "Beacon"
             landmarkType = "13">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Test2.MyLocationManager.Beacon.init (rawValue : Swift.Int) -&gt; Swift.Optional&lt;Test2.MyLocationManager.Beacon&gt;"
+                  moduleName = "Test2"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
+                  timestampString = "502592093.275132"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "22"
+                  endingLineNumber = "22"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Test2.MyLocationManager.Beacon.rawValue.getter : Swift.Int"
+                  moduleName = "Test2"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
+                  timestampString = "502592093.278596"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "22"
+                  endingLineNumber = "22"
+                  offsetFromSymbolStart = "64">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -42,13 +121,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Test2/MyLocationManager.swift"
-            timestampString = "502485714.634491"
+            timestampString = "502592091.945989"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
             landmarkName = "MyLocationManager"
             landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Test2.MyLocationManager.region.getter : __ObjC.CLBeaconRegion"
+                  moduleName = "Test2"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
+                  timestampString = "502592093.283684"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "39"
+                  endingLineNumber = "39"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Test2.MyLocationManager.init (destination : Test2.MyLocations.Location, delegate : Test2.NavigationInstructor) -&gt; Test2.MyLocationManager"
+                  moduleName = "Test2"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
+                  timestampString = "502592093.285818"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "39"
+                  endingLineNumber = "39"
+                  offsetFromSymbolStart = "360">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -58,11 +169,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Test2/MyLocationManager.swift"
-            timestampString = "502486007.618475"
+            timestampString = "502592091.945989"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
             landmarkName = "init(destination:delegate:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,12 +185,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Test2/DestinationGuide.swift"
-            timestampString = "502576126.09194"
+            timestampString = "502592091.945989"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
             landmarkName = "moveEast()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Test2/ViewController.swift"
+            timestampString = "502663413.712472"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
