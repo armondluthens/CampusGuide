@@ -68,7 +68,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
     @IBAction func kuhl(_ sender: AnyObject) {
         selectedDestination = 2
         print("in kuhl")
-        speaker.speak(wordsToSay: "test string")
+        //speaker.speak(wordsToSay: "test string")
     }
     
     @IBAction func restroom(_ sender: AnyObject) {
