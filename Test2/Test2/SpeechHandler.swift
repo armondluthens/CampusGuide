@@ -199,11 +199,6 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
 }
 class Speaker: NSObject {
     var previousDateTime = NSDate()
-    
-    
-    
-    
-    
     var synth: AVSpeechSynthesizer!
     var myUtterance: AVSpeechUtterance!
     var curWords: String!
@@ -218,12 +213,13 @@ class Speaker: NSObject {
     }
     
     func speak(wordsToSay: String) {
-        _ = NSDate()
-        var elapsed = Date().timeIntervalSince(previousDateTime as Date)
+       
+        var elaspedTime = Date().timeIntervalSince(previousDateTime as Date)
+        previousDateTime = NSDate()
         
         prevWords = curWords
         curWords = wordsToSay
-        if(prevWords != curWords){
+        if(prevWords != curWords || elaspedTime > 10){
             myUtterance = AVSpeechUtterance(string: curWords)
             synth.speak(myUtterance)
         }
