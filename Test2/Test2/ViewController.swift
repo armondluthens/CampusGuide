@@ -291,7 +291,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
             
             //provide current directions to user
             self.directionsMessage.text = currentDirections
-            
         }
         
     }
@@ -336,85 +335,61 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
 //            }
 //            self.displaySelectDestination.text = curDes
 //            
-//            //You are closest to Workstation 1
 //            if(closest == w1){
 //                if (selectedDestination == 1){
 //                    currentDirections = commandDestination
-//                    //call speech function
 //                }
 //                else{
 //                    currentDirections = commandStraight
 //                }
 //            }
-//                
-//            //You are closest to Worksation 2
 //            else if(closest == w2){
 //                if (selectedDestination == 1){
 //                    currentDirections = commandTurnAround
-//                    //call speech function
 //                }
 //                else{
 //                    currentDirections = commandRight
-//                    //call speech function
 //                }
 //            }
-//                
-//            //You are closest to Worksation 3
 //            else if(closest == w3){
 //                if (selectedDestination == 1){
 //                    currentDirections = commandTurnAround
-//                    //call speech function
 //                }
 //                else{
 //                    currentDirections = commandStraight
 //                }
 //            }
-//                
-//            //You are closest to Worksation 4
 //            else if(closest == w4){
 //                if (selectedDestination == 1){
 //                    currentDirections = commandTurnAround
-//                    //call speech function
 //                }
 //                else if(selectedDestination == 2){
 //                    currentDirections = commandDestination
-//                    //call speech function
 //                }
 //                else{
 //                    currentDirections = commandStraight
-//                    //call speech function
 //                }
 //            }
-//                
-//                //You are closest to Worksation 5
 //            else if(closest == w5){
 //                if (selectedDestination == 1){
 //                    currentDirections = commandTurnAround
-//                    //call speech function
 //                }
 //                else if(selectedDestination == 2){
 //                    currentDirections = commandTurnAround
-//                    //call speech function
 //                }
 //                else{
 //                    currentDirections = commandLeft
-//                    //call speech function
 //                }
 //            }
-//                
-//            //You are closest to Worksation 6
 //            else if(closest == w6){
 //                if (selectedDestination == 1){
 //                    currentDirections = commandTurnAround
-//                    //call speech function
 //                }
 //                else if(selectedDestination == 2){
 //                    currentDirections = commandTurnAround
-//                    //call speech function
 //                }
 //                else{
 //                    currentDirections = commandDestination
-//                    //call speech function
 //                }
 //            }
 //            
@@ -436,25 +411,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
     ******************************************************************************************/
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         headingReadCount = headingReadCount+1
-        var acc = newHeading.headingAccuracy
         currentHeading = newHeading.magneticHeading
-        
-        var curHeadingInt = Int(currentHeading)
+
         print("initial read in COMPASS FUNC: \(currentHeading)")
-        //locationManager.stopUpdatingHeading()
+        
         if(calibrated == false && headingReadCount==5){
+            let curHeadingInt = Int(currentHeading)
             calibration(initialReading: curHeadingInt)
         }
         
         let headingString:String = String(currentHeading)
-        
         print("heading: \(currentHeading)")
-
+        
+        //display heading in app UI
         self.closestWorkstation.text = headingString
     }
     
     /******************************************************************************************
-                Speeech Function
+                Speech Function
      ******************************************************************************************/
     func textToSpeech(wordsToSay: String) {
         let synth = AVSpeechSynthesizer()
@@ -465,9 +439,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
             synth.speak(myUtterance)
         }
         previousMessage = wordsToSay
-        
     }
     
+    /******************************************************************************************
+                Compass Calibration Function
+    ******************************************************************************************/
     func calibration(initialReading: Int){
         SOUTH=initialReading
         
@@ -506,15 +482,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
             SOUTHEAST=SOUTHEAST+360
         }
 
-        
         print("NORTH: \(NORTH)")
         print("WEST: \(WEST)")
         print("SOUTH: \(SOUTH)")
         print("EAST: \(EAST)")
         
         calibrated = true
-        textToSpeech(wordsToSay: "compass is calibrated")
-        
     }
     
     
