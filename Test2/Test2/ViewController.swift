@@ -46,6 +46,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
     var KuhlCount = 0
     var restroomCount = 0
     var previousMessage=""
+    var headingReadCount=0
     
     var calibrated = false
     
@@ -57,6 +58,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
     var SOUTH=0
     var WEST=0
     
+    var NORTHWEST=0
+    var NORTHEAST=0
+    var SOUTHWEST=0
+    var SOUTHEAST=0
+    
     /*----------------------------------------------------------------
      UI Button Action Methods:
      
@@ -66,9 +72,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
         3. 4th Floor Bathroom
     ----------------------------------------------------------------*/
     @IBAction func ece(_ sender: AnyObject) {
-        if(myBluetooth.isReady){
-            myBluetooth.sendMessageToWearable(string: "0")
-        }
+//        if(myBluetooth.isReady){
+//            myBluetooth.sendMessageToWearable(string: "0")
+//        }
         selectedDestination = 1
     }
     
@@ -105,7 +111,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
             locationManager.requestWhenInUseAuthorization()
         }
         // start ranging beacons with location delegate
-        
         locationManager.startRangingBeacons(in: region)
         
         
@@ -120,7 +125,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
     
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
-        
+        //beacons
         let w1 = 62098
         let w2 = 73
         let w3 = 4053
@@ -128,29 +133,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
         let w5 = 43767
         let w6 = 49435
         
+        //walking commands
         let commandLeft = "Stop. Turn in place to your left"
         let commandRight = "Stop. Turn in place to your right"
         let commandStraight = "Proceed Forward"
         let commandDestination = "You have reached your destination"
-
+        
+        //closest beacon
         var closest=0
-        //var secondClosest=0
         var currentDirections=""
         var curDes=""
-        
-        var maxDegree = 0
-        var minDegree = 0
-
-        print(beacons) //printing beacon info to console for testing
+    
+        //printing beacon info to console for testing
+        //print(beacons)
         
         let knownBeacons = beacons.filter{ $0.proximity != CLProximity.unknown }
         if (knownBeacons.count > 0) {
             
             let closestBeacon = knownBeacons[0] as CLBeacon
             closest = closestBeacon.minor.intValue
-            
-            //let secondClosestBeacon = knownBeacons[1] as CLBeacon
-            //secondClosest = secondClosestBeacon.minor.intValue
             
             if(selectedDestination == 1){
                 curDes = "Selected Destination: ECE Office"
@@ -163,351 +164,128 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
             }
             self.displaySelectDestination.text = curDes
             
-            /*
-                Commands:
-                1. Turn Left
-                2. Turn Right
-                3. Straight
-                4. ECE Office
-                5. Kuhl's Office
-                6. Bathroom
-             
-             */
             
-            //You are closest to Workstation 1
             if(closest == w1){
-                textToSpeech(wordsToSay: "Beacon One")
-                
                 if (selectedDestination == 1){
-                    //commandDestination
-                    currentDirections = "You are at the ECE office!"
-                    if(lastVoiceCommand != 4){
-                        //textToSpeech(wordsToSay: "You are at the ECE office!")
-                        lastVoiceCommand = 4
-                    }
-                    
+                    currentDirections = commandDestination
                 }
                 else {
-                    if(currentHeading < 110.0){
-                        //commandRight
-                        currentDirections = "Turn in place to your right"
-                        if(lastVoiceCommand != 2){
-                            //textToSpeech(wordsToSay: "Turn in place to your right")
-                            lastVoiceCommand = 2
-                        }
-                        
+                    if(currentHeading < Double(SOUTH-45)){
+                        currentDirections = commandRight
                     }
-                    else if(currentHeading > 260.0){
-                        //commandLeft
-                        currentDirections = "Turn in place to your left"
-                        if(lastVoiceCommand != 1){
-                            //textToSpeech(wordsToSay: "Turn in place to your left")
-                            //bluetooth signal left
-                            lastVoiceCommand = 1
-                        }
-                        
+                    else if(currentHeading > Double(SOUTH+45)){
+                        currentDirections = commandLeft
                     }
                     else{
-                        //commandStraight
-                        currentDirections = "Proceed Straight"
-                        if(lastVoiceCommand != 3){
-                            //textToSpeech(wordsToSay: commandStraight)
-                            lastVoiceCommand = 3
-                        }
-                        
+                        currentDirections = commandStraight
                     }
                 }
             }
-                
-            //You are closest to Worksation 2
             else if(closest == w2){
-                textToSpeech(wordsToSay: "Beacon Two")
                 if (selectedDestination == 1){
-                    if(currentHeading > 160.0 && currentHeading < 320.0){
-                        //commandRight
-                        currentDirections = "Stop. Turn in place to your right"
-                        if(lastVoiceCommand != 2){
-                            //textToSpeech(wordsToSay: "Turn in place to your right")
-                            lastVoiceCommand = 2
-                        }
-
+                    if(currentHeading < Double(SOUTHWEST) && currentHeading > Double(SOUTH+1)){
+                        currentDirections = commandRight
                     }
-                    else if(currentHeading <= 160.0 && currentHeading > 20.0){
-                        //commandLeft
-                        currentDirections = "Stop. Turn in place to your left"
-                        if(lastVoiceCommand != 1){
-                            //textToSpeech(wordsToSay: "Turn in place to your left")
-                            lastVoiceCommand = 1
-                        }
+                    else if(currentHeading > Double(SOUTHEAST) && currentHeading < Double(SOUTH)){
+                        currentDirections = commandLeft
                     }
                     else{
-                        //commandStraight
-                        currentDirections = "Proceed Forward"
-                        if(lastVoiceCommand != 3){
-                            //textToSpeech(wordsToSay: commandStraight)
-                            lastVoiceCommand = 3
-                        }
-
+                        currentDirections = commandStraight
                     }
                 }
                 else{
-                    if(currentHeading < 230.0){
-                        //commandRight
-                        currentDirections = "Stop. Turn in place to your right"
-                        if(lastVoiceCommand != 2){
-                            //textToSpeech(wordsToSay: "Turn in place to your right")
-                            lastVoiceCommand = 2
-                        }
-
+                    if(currentHeading < Double(SOUTHWEST)){
+                        currentDirections = commandRight
                     }
-                    else if(currentHeading > 290.0){
-                        //commandLeft
-                        currentDirections = "Stop. Turn in place to your left"
-                        if(lastVoiceCommand != 1){
-                            //textToSpeech(wordsToSay: "Turn in place to your left")
-                            lastVoiceCommand = 1
-                        }
+                    else if(currentHeading > Double(NORTHWEST)){
+                        currentDirections = commandLeft
                     }
                     else{
-                        //commandStraight
-                        currentDirections = "Proceed Forward"
-                        if(lastVoiceCommand != 3){
-                            //textToSpeech(wordsToSay: commandStraight)
-                            lastVoiceCommand = 3
-                        }
+                        currentDirections = commandStraight
                     }
                 }
             }
-            
-            //You are closest to Worksation 3
             else if(closest == w3){
-                textToSpeech(wordsToSay: "Beacon Three")
-                
                 if (selectedDestination == 1){
-                    //ideal range: 50 deg - 110 deg
-                    
-                    if(currentHeading < 50){
-                        //commandRight
-                        currentDirections = "Stop. Turn in place to your right"
-                        if(lastVoiceCommand != 2){
-                            //textToSpeech(wordsToSay: "Turn in place to your right")
-                            
-                            lastVoiceCommand = 2
-                        }
-                    }
-                    else if(currentHeading > 110){
-                        //commandLeft
-                        currentDirections = "Stop. Turn in place to your left"
-                        if(lastVoiceCommand != 1){
-                            //textToSpeech(wordsToSay: "Turn in place to your left")
-                            lastVoiceCommand = 1
-                        }
+                    if(currentHeading > Double(SOUTHEAST)){
+                        currentDirections = commandLeft
                     }
                     else{
-                        //commandStraight
-                        currentDirections = "Proceed Forward"
-                        if(lastVoiceCommand != 3){
-                            //textToSpeech(wordsToSay: commandStraight)
-                            lastVoiceCommand = 3
-                        }
+                        currentDirections = commandStraight
                     }
                 }
                 else{
-                    if(currentHeading < 230.0){
-                        //commandRight
-                        currentDirections = "Stop. Turn in place to your right"
-                        if(lastVoiceCommand != 2){
-                            //textToSpeech(wordsToSay: "Turn in place to your right")
-                            lastVoiceCommand = 2
-                        }
+                    if(currentHeading < Double(SOUTHWEST)){
+                        currentDirections = commandRight
                     }
-                    else if(currentHeading > 290.0){
-                        //commandLeft
-                        currentDirections = "Stop. Turn in place to your left"
-                        if(lastVoiceCommand != 1){
-                            //textToSpeech(wordsToSay: "Turn in place to your left")
-                            lastVoiceCommand = 1
-                        }
+                    else if(currentHeading > Double(NORTHWEST)){
+                        currentDirections = commandLeft
                     }
                     else{
-                        //commandStraight
-                        currentDirections = "Proceed Forward"
-                        if(lastVoiceCommand != 3){
-                            //textToSpeech(wordsToSay: commandStraight)
-                            lastVoiceCommand = 3
-                        }
+                        currentDirections = commandStraight
                     }
                 }
             }
-            
-            //You are closest to Worksation 4
             else if(closest == w4){
-                textToSpeech(wordsToSay: "Beacon Four")
-                
                 if (selectedDestination == 1){
-                    //ideal range: 50 deg - 110 deg
-                    if(currentHeading < 50){
-                        //commandRight
-                        currentDirections = "Stop. Turn in place to your right"
-                        if(lastVoiceCommand != 2){
-                            //textToSpeech(wordsToSay: "Turn in place to your right")
-                            lastVoiceCommand = 2
-                        }
-                    }
-                    else if(currentHeading > 110){
-                        //commandLeft
-                        currentDirections = "Stop. Turn in place to your left"
-                        if(lastVoiceCommand != 1){
-                            //textToSpeech(wordsToSay: "Turn in place to your left")
-                            lastVoiceCommand = 1
-                        }
+                    if(currentHeading > Double(SOUTHEAST)){
+                        currentDirections = commandLeft
                     }
                     else{
-                        //commandStraight
-                        currentDirections = "Proceed Forward"
-                        if(lastVoiceCommand != 3){
-                            //textToSpeech(wordsToSay: commandStraight)
-                            lastVoiceCommand = 3
-                        }
+                        currentDirections = commandStraight
                     }
                 }
                 else if (selectedDestination == 2){
-                    //commandDestination
-                    currentDirections = "You have reached Professor Kuhl's Office"
-                    if(lastVoiceCommand != 5){
-                        //textToSpeech(wordsToSay: "You are at the Professor Kuhl's office!")
-                        lastVoiceCommand = 5
-                    }
+                    currentDirections = commandDestination
+                    
                 }
                 else{
-                    if(currentHeading < 230.0){
-                        //commandRight
-                        currentDirections = "Stop. Turn in place to your right"
-                        if(lastVoiceCommand != 2){
-                            //textToSpeech(wordsToSay: "Turn in place to your right")
-                            lastVoiceCommand = 2
-                        }
+                    if(currentHeading < Double(SOUTHWEST)){
+                        currentDirections = commandRight
                     }
-                    else if(currentHeading > 290.0){
-                        //commandLeft
-                        currentDirections = "Stop. Turn in place to your left"
-                        if(lastVoiceCommand != 1){
-                            //textToSpeech(wordsToSay: "Turn in place to your left")
-                            lastVoiceCommand = 1
-                        }
+                    else if(currentHeading > Double(NORTHWEST)){
+                        currentDirections = commandLeft
                     }
                     else{
-                        //commandStraight
-                        currentDirections = "Proceed Forward"
-                        if(lastVoiceCommand != 3){
-                            //textToSpeech(wordsToSay: commandStraight)
-                            lastVoiceCommand = 3
-                        }
+                        currentDirections = commandStraight
                     }
                 }
             }
-            
-            //You are closest to Worksation 5
             else if(closest == w5){
-                textToSpeech(wordsToSay: "Beacon Five")
-                
-                //ideal range: 50 deg - 110 deg
                 if (selectedDestination == 1 || selectedDestination == 2){
-                    if(currentHeading < 50){
-                        //commandRight
-                        currentDirections = "Stop. Turn in place to your right"
-                        if(lastVoiceCommand != 2){
-                            //textToSpeech(wordsToSay: "Turn in place to your right")
-                            lastVoiceCommand = 2
-                        }
-                    }
-                    else if(currentHeading > 110){
-                        //commandLeft
-                        currentDirections = "Stop. Turn in place to your left"
-                        if(lastVoiceCommand != 1){
-                            //textToSpeech(wordsToSay: "Turn in place to your left")
-                            lastVoiceCommand = 1
-                        }
+                    if(currentHeading > Double(SOUTHEAST)){
+                        currentDirections = commandLeft
                     }
                     else{
-                        //commandStraight
-                        currentDirections = "Proceed Forward"
-                        if(lastVoiceCommand != 3){
-                            //textToSpeech(wordsToSay: commandStraight)
-                            lastVoiceCommand = 3
-                        }
+                        currentDirections = commandStraight
                     }
                 }
-                //ideal range: 140 deg - 200 deg
                 else{
-                    if(currentHeading < 140){
-                        //commandRight
-                        currentDirections = "Stop. Turn in place to your right"
-                        if(lastVoiceCommand != 2){
-                            //textToSpeech(wordsToSay: "Turn in place to your right")
-                            lastVoiceCommand = 2
-                        }
+                    if(currentHeading < Double(SOUTHEAST)){
+                        currentDirections = commandRight
                     }
-                    else if(currentHeading > 200){
-                        //commandLeft
-                        currentDirections = "Stop. Turn in place to your left"
-                        if(lastVoiceCommand != 1){
-                            //textToSpeech(wordsToSay: "Turn in place to your left")
-                            lastVoiceCommand = 1
-                        }
+                    if(currentHeading > Double(SOUTHWEST)){
+                        currentDirections = commandRight
                     }
                     else{
-                        //commandStraight
-                        currentDirections = "Proceed Forward"
-                        if(lastVoiceCommand != 3){
-                            //textToSpeech(wordsToSay: commandStraight)
-                            lastVoiceCommand = 3
-                        }
+                        currentDirections = commandStraight
                     }
                 }
             }
             
             //You are closest to Worksation 6
             else if(closest == w6){
-                textToSpeech(wordsToSay: "Beacon Six")
-                 if (selectedDestination == 1 || selectedDestination == 2){
-                    //ideal range: 320 deg to 20 deg
-                    if(currentHeading < 170 && currentHeading > 20){
-                        //commandLeft
-                        currentDirections = "Stop. Turn in place to your left"
-                        if(lastVoiceCommand != 1){
-                            //textToSpeech(wordsToSay: "Turn in place to your left")
-                            lastVoiceCommand = 1
-                        }
-                    }
-                    else if(currentHeading >= 170 && currentHeading < 320){
-                        //commandRight
-                        currentDirections = "Stop. Turn in place to your right"
-                        if(lastVoiceCommand != 2){
-                            //textToSpeech(wordsToSay: "Turn in place to your right")
-                            lastVoiceCommand = 2
-                        }
-                    }
-                    else{
-                        //commandStraight
-                        currentDirections = "Proceed Forward"
-                        if(lastVoiceCommand != 3){
-                            //textToSpeech(wordsToSay: commandStraight)
-                            lastVoiceCommand = 3
-                        }
-                    }
-                 }
-                 else{
-                    //commandDestination
-                    currentDirections = "You have reached the bathroom"
-                    if(lastVoiceCommand != 6){
-                        //textToSpeech(wordsToSay: "You have reached the restroom!")
-                        lastVoiceCommand = 6
-                    }
-                 }
-                
+                if (selectedDestination == 1 || selectedDestination == 2){
+                    currentDirections = "Turn Around"
+                }
+                else{
+                    currentDirections = commandDestination
+                }
             }
-
+            
+            //call speech function (currentDirections)
+            textToSpeech(wordsToSay: currentDirections)
+            
             //print the beacon you are closest to
             self.text.text = self.workstation[closestBeacon.minor.intValue]
             
@@ -657,23 +435,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
                 Compass Heading Function
     ******************************************************************************************/
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        headingReadCount = headingReadCount+1
         var acc = newHeading.headingAccuracy
         currentHeading = newHeading.magneticHeading
         
         var curHeadingInt = Int(currentHeading)
-        if(calibrated == false){
+        print("initial read in COMPASS FUNC: \(currentHeading)")
+        //locationManager.stopUpdatingHeading()
+        if(calibrated == false && headingReadCount==5){
             calibration(initialReading: curHeadingInt)
         }
+        
         let headingString:String = String(currentHeading)
         
         print("heading: \(currentHeading)")
-        print("accuracy: \(acc)")
-//        if(acc > 20){
-//            //locationManager.stopUpdatingHeading()
-//            print("Restarting Updating Heading")
-//            //locationManager.startUpdatingHeading()
-//        }
-        //self.closestWorkstation.text = headingString
+
+        self.closestWorkstation.text = headingString
     }
     
     /******************************************************************************************
@@ -693,17 +470,51 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
     
     func calibration(initialReading: Int){
         SOUTH=initialReading
-        if(SOUTH>180){
         
+        if(SOUTH>180){
+            NORTH=SOUTH-180
         }
         else{
             NORTH=SOUTH+180
         }
+        if(NORTH>0 && NORTH<180){
+            EAST=NORTH+90
+        }
+        else{
+            EAST=SOUTH-90
+        }
+        if(EAST>180){
+            WEST=EAST-180
+        }
+        else{
+            WEST=EAST+180
+        }
+        NORTHEAST=NORTH+45
+        if(NORTHEAST > 360){
+            NORTHEAST=NORTHEAST-360
+        }
+        NORTHWEST=NORTH-45
+        if(NORTHWEST<0){
+            NORTHWEST=NORTH+360
+        }
+        SOUTHWEST=SOUTH+45
+        if(SOUTHWEST > 360){
+            SOUTHWEST=SOUTHWEST-360
+        }
+        SOUTHEAST=SOUTH-45
+        if(SOUTHEAST<0){
+            SOUTHEAST=SOUTHEAST+360
+        }
+
         
-        WEST=5
-        EAST=5
+        print("NORTH: \(NORTH)")
+        print("WEST: \(WEST)")
+        print("SOUTH: \(SOUTH)")
+        print("EAST: \(EAST)")
         
         calibrated = true
+        textToSpeech(wordsToSay: "compass is calibrated")
+        
     }
     
     
