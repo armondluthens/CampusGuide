@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreLocation
+import CoreMotion
 
 var myLocationManager: MyLocationManager!
 
@@ -46,13 +47,32 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     var command: Direction!
     private var delegate: NavigationInstructor!
     
+    // motion test
+    let motionManager: CMMotionManager = CMMotionManager()
+    
     init(destination: MyLocations.Location, delegate: NavigationInstructor){
         
         super.init()
         self.delegate = delegate
         selectedDestination = destination
         locationManager.delegate = self
+        motionManager.deviceMotionUpdateInterval = 0.5
         
+        // createGuide()
+        
+        // authorize location services if not authorized
+        if(CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse){
+            locationManager.requestWhenInUseAuthorization()
+        }
+        // start ranging beacons with location delegate
+        // locationManager.startRangingBeacons(in: region)
+        
+        // start getting compass heading with location delegate
+        locationManager.startUpdatingHeading()
+        
+        
+    }
+    func createGuide(){
         if(selectedDestination == MyLocations.Location.KUHL_OFFICE){
             destinationGuide = KuhlOfficeGuide(delegate: self)
         }
@@ -63,14 +83,10 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
             destinationGuide = BathroomGuide(delegate: self)
         }
         
-        // authorize location services if not authorized
-        if(CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse){
-            locationManager.requestWhenInUseAuthorization()
-        }
-        // start ranging beacons with location delegate
-        locationManager.startRangingBeacons(in: region)
-        // start getting compass heading with location delegate
-        locationManager.startUpdatingHeading()
+    }
+    func setStartingDirection(){
+    }
+    func reportDirection(){
     }
     func reveiceNewCommand(command: MyLocationManager.Direction){
         
@@ -90,6 +106,8 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         
     }
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        let str: String = "accuracy \(newHeading.headingAccuracy)" + "heading \(newHeading.magneticHeading)\n"
+        print(str)
     }
     
 }
