@@ -133,6 +133,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
         let w5 = 43767
         let w6 = 49435
         
+        var orientationThreshold=0
+        // 1 = NORTH
+        // 2 = SOUTH
+        // 3 = EAST
+        // 4 = WEST
+        
         //walking commands
         let commandLeft = "Stop. Turn in place to your left"
         let commandRight = "Stop. Turn in place to your right"
@@ -182,6 +188,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
                 }
             }
             else if(closest == w2){
+                                
                 if (selectedDestination == 1){
                     if(currentHeading < Double(SOUTHWEST) && currentHeading > Double(SOUTH+1)){
                         currentDirections = commandRight
