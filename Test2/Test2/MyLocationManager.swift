@@ -48,7 +48,7 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     private var delegate: NavigationInstructor!
     
     // motion test
-    let motionManager: CMMotionManager = CMMotionManager()
+    // let motionManager: CMMotionManager = CMMotionManager()
     
     init(destination: MyLocations.Location, delegate: NavigationInstructor){
         
@@ -56,16 +56,17 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         self.delegate = delegate
         selectedDestination = destination
         locationManager.delegate = self
-        motionManager.deviceMotionUpdateInterval = 0.5
         
-        // createGuide()
+        // motionManager.deviceMotionUpdateInterval = 0.5
+        
+        createGuide()
         
         // authorize location services if not authorized
         if(CLLocationManager.authorizationStatus() != CLAuthorizationStatus.authorizedWhenInUse){
             locationManager.requestWhenInUseAuthorization()
         }
         // start ranging beacons with location delegate
-        // locationManager.startRangingBeacons(in: region)
+        locationManager.startRangingBeacons(in: region)
         
         // start getting compass heading with location delegate
         locationManager.startUpdatingHeading()
@@ -83,10 +84,6 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
             destinationGuide = BathroomGuide(delegate: self)
         }
         
-    }
-    func setStartingDirection(){
-    }
-    func reportDirection(){
     }
     func reveiceNewCommand(command: MyLocationManager.Direction){
         

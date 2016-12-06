@@ -15,8 +15,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "18"
             endingLineNumber = "18"
-            landmarkName = "MyLocationManager"
-            landmarkType = "3">
+            landmarkName = "NavigationInstructor"
+            landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
@@ -26,7 +26,7 @@
                   moduleName = "Test2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
-                  timestampString = "502671253.127733"
+                  timestampString = "502682179.6939"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -41,11 +41,11 @@
                   moduleName = "Test2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
-                  timestampString = "502671253.129742"
+                  timestampString = "502682179.696259"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
+                  startingLineNumber = "20"
+                  endingLineNumber = "20"
                   offsetFromSymbolStart = "16">
                </Location>
                <Location
@@ -56,7 +56,7 @@
                   moduleName = "Test2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
-                  timestampString = "502671253.13164"
+                  timestampString = "502682179.698595"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -89,11 +89,11 @@
                   moduleName = "Test2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
-                  timestampString = "502671253.136214"
+                  timestampString = "502682179.703796"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "22"
-                  endingLineNumber = "22"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
                   offsetFromSymbolStart = "12">
                </Location>
                <Location
@@ -104,11 +104,11 @@
                   moduleName = "Test2"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/stephaniesmith/SeniorDesign/CampusGuide/Test2/Test2/MyLocationManager.swift"
-                  timestampString = "502671253.138174"
+                  timestampString = "502682179.705838"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "22"
-                  endingLineNumber = "22"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
                   offsetFromSymbolStart = "64">
                </Location>
             </Locations>
@@ -136,30 +136,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Test2/ViewController.swift"
-            timestampString = "502671005.683268"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "61"
-            endingLineNumber = "61"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Test2/SpeechHandler.swift"
-            timestampString = "502676203.683818"
+            timestampString = "502681954.562975"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "PhraseCategory"
-            landmarkType = "14">
+            startingLineNumber = "176"
+            endingLineNumber = "176"
+            landmarkName = "pocketsphinxDidReceiveHypothesis(_:recognitionScore:utteranceID:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

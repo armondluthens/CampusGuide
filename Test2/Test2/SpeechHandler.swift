@@ -60,6 +60,7 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
     }
     
     func createRecognizedWords(){
+        
         // add anything here that you want to be recognized.
         // must be in capital letters
         recognizedWords.append("START")
@@ -83,27 +84,31 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
         recognizedWords.append("BATHROOM")
         recognizedWords.append("E C E OFFICE")
         
-        
-        
     }
     
     // starting the request nav process
     func isStartNavCommand(string: String) -> Bool {
+        print("start nav")
         return comparePhrase(string: string, startIndex: possiblePhrases.startNavigation.start, endIndex: possiblePhrases.startNavigation.end)
     }
     func isStopNavCommand(string: String) -> Bool {
+          print("stop nav")
           return comparePhrase(string: string, startIndex: possiblePhrases.endNavigation.start, endIndex: possiblePhrases.endNavigation.end)
     }
     func isYesCommand(string: String) -> Bool {
+        print("is yes")
         return comparePhrase(string: string, startIndex: possiblePhrases.confirmationYes.start, endIndex: possiblePhrases.confirmationYes.end)
     }
     func isNoCommand(string: String) -> Bool {
+        print("is new")
         return comparePhrase(string: string, startIndex: possiblePhrases.confirmationNo.start, endIndex: possiblePhrases.confirmationNo.end)
     }
     func isDestinationCommand(string: String) -> Bool {
-        return comparePhrase(string: string, startIndex: possiblePhrases.kuhlOffice.start, endIndex: possiblePhrases.numCategories - 1)
+        print("is destination")
+        return comparePhrase(string: string, startIndex: possiblePhrases.kuhlOffice.start, endIndex: 16)
     }
     func getDestination(string: String) -> MyLocations.Location{
+        print("get des")
         if(comparePhrase(string: string, startIndex: possiblePhrases.kuhlOffice.start, endIndex: possiblePhrases.kuhlOffice.end) == true){
             return MyLocations.Location.KUHL_OFFICE
         }
@@ -145,8 +150,8 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
     /**
      * description: turn on the API
      **/
-    private func startListening() {
-        print("started listening")
+    func startListening() {
+       //  print("started listening")
         do{
             try OEPocketsphinxController.sharedInstance().setActive(true)
         }
@@ -158,7 +163,7 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
     /**
      * description: turn off the API
      **/
-    private func stopListening() {
+    func stopListening() {
         OEPocketsphinxController.sharedInstance().stopListening()
     }
     /**
@@ -168,25 +173,28 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
         
         print("Heard: \(hypothesis)")
         print("recognitionScore: \(recognitionScore)")
-        delegate.retrievePhrase(command: hypothesis)
+        if(Int(recognitionScore)! > -115000){
+            delegate.retrievePhrase(command: hypothesis)
+        }
+        
     }
     /**
      * note: is a delegate method of OEEventsObserver
      **/
     func pocketsphinxDidStartListening() {
-        print("Pocketsphinx is now listening.")
+       // print("Pocketsphinx is now listening.")
     }
     /**
      * note: is a delegate method of OEEventsObserver
      **/
     func pocketsphinxDidDetectSpeech() {
-        print("Pocketsphinx has detected speech.")
+       // print("Pocketsphinx has detected speech.")
     }
     /**
      * note: is a delegate method of OEEventsObserver
      **/
     func pocketsphinxDidDetectFinishedSpeech() {
-        print("Pocketsphinx has detected a period of silence, concluding an utterance.")
+        // print("Pocketsphinx has detected a period of silence, concluding an utterance.")
     }
 }
 class Speaker: NSObject {

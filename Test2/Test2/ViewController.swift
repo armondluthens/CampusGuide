@@ -19,7 +19,7 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
         
         var startRequested:Bool = false
         var destinationConfirmed:Bool = false
-        var changingDestination:Bool = false
+        var setDestination:Bool = false
         var inProgress:Bool = false
         var destination:MyLocations.Location!
     }
@@ -43,25 +43,19 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
      3. 4th Floor Bathroom
      ----------------------------------------------------------------*/
     @IBAction func ece(_ sender: AnyObject) {
-        if(myBluetooth.isReady){
-            myBluetooth.sendMessageToWearable(string: "0")
-        }
-       
+        startNavigation(mydestination: MyLocations.Location.ECE_OFFICE)
     }
     @IBAction func kuhl(_ sender: AnyObject) {
-        
-        print("in kuhl")
-        speaker.speak(wordsToSay: "test string")
+        startNavigation(mydestination: MyLocations.Location.KUHL_OFFICE)
     }
     @IBAction func restroom(_ sender: AnyObject) {
-        
+       startNavigation(mydestination: MyLocations.Location.BATHROOM)
     }
     override func viewDidLoad() {
         print("on view load")
         super.viewDidLoad()
-        myLocationManager = MyLocationManager(destination: MyLocations.Location.BATHROOM, delegate: self)
         myBluetooth = MyBluetooth(delegate: self)
-        speechRecognizer = SpeechRecognizer(delegate: self)
+        // speechRecognizer = SpeechRecognizer(delegate: self)
         speaker = Speaker()
         
  
@@ -74,46 +68,70 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
     func getNewDestination(){
         navigationState.inProgress = false
         navigationState.destinationConfirmed = false
-        speaker.speak(wordsToSay: "WHAT IS YOUR NEW INFORMATION?")
+        navigationState.setDestination = false
+        speaker.speak(wordsToSay: "WHAT IS YOUR NEW DESTINATION?")
         
     }
     func startNavigation(mydestination: MyLocations.Location){
         myLocationManager = MyLocationManager(destination: mydestination, delegate: self)
+        print("START NAVIGATION")
     }
+    
+    
+    
     // starting navigation
     func retrievePhrase(command: String){
-        
+        // stop while processing command
+        speechRecognizer.stopListening()
         if(speechRecognizer.isStartNavCommand(string: command) && !navigationState.startRequested){
             if(navigationState.inProgress){
-                navigationState.changingDestination = false
                 getNewDestination()
-                navigationState.startRequested = true
             }
             else{
-                navigationState.inProgress = true
                 speaker.speak(wordsToSay: "NAVIGATION STARTED, CHOOSE DESTINATION")
             }
+            navigationState.startRequested = true
         }
         else if(speechRecognizer.isStopNavCommand(string: command)){
             speaker.speak(wordsToSay: "STOPPING NAVIGATION")
             navigationState.startRequested = false
             navigationState.inProgress = false
             navigationState.destinationConfirmed = false
+            navigationState.setDestination = false
             
         }
         else if(speechRecognizer.isDestinationCommand(string: command)){
+            // set destination
             navigationState.destination = speechRecognizer.getDestination(string: command)
+            navigationState.setDestination = true
         }
         else if(speechRecognizer.isYesCommand(string: command)){
-            speaker.speak(wordsToSay: "STARTING NAVIGATION TO \(command)")
-            startNavigation(mydestination: navigationState.destination)
+            if(navigationState.setDestination){
+                navigationState.destinationConfirmed = true
+                speaker.speak(wordsToSay: "STARTING NAVIGATION TO \(navigationState.destination)")
+                startNavigation(mydestination: navigationState.destination)
+                navigationState.inProgress = true
+                navigationState.startRequested = false
+                navigationState.destinationConfirmed = false
+                navigationState.setDestination = false
+            }
+            
         }
         else if(speechRecognizer.isNoCommand(string: command)){
             speaker.speak(wordsToSay: "REPEAT DESTINATION")
         }
+        // start listening again now that command is processed
+        speechRecognizer.startListening()
     }
     func receivedNewInstruction(command: String){
         speaker.speak(wordsToSay: command)
+        if(command == "YOU HAVE ARRIVED"){
+            navigationState.startRequested = false
+            navigationState.inProgress = false
+            navigationState.setDestination = false
+            navigationState.destinationConfirmed = false
+            
+        }
     }
 
 }
