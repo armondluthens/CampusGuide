@@ -77,7 +77,7 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
     }
     func startNavigation(mydestination: MyLocations.Location){
         MyLocationManager.stopNav = false
-        myLocationManager = MyLocationManager(destination: mydestination, delegate: self)
+        myLocationManager = MyLocationManager(destination: mydestination, delegate: self, calibrate: !isCompassCalibrated)
         print("START NAVIGATION")
     }
     
@@ -143,19 +143,97 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
     }
     
     // should be called right away
-    func calibrateCommpass(heading: CLHeading) {
-        isCompassCalibrated = true
-        setThresholdVal(north: 0, south: 0, east: 0, west: 0)
+    func calibrateCommpass(initialReading: Double) {
+        closestWorkstation.text = "calibrating"
+        
+        let SOUTH: Double = initialReading
+        var NORTH: Double!
+        var EAST: Double!
+        var WEST: Double!
+    
+        
+        // getting the normal directions
+        if(SOUTH>180){
+            NORTH=SOUTH-180
+        }
+        else{
+            NORTH=SOUTH+180
+        }
+        if(NORTH>0 && NORTH<180){
+            EAST=NORTH+90
+        }
+        else{
+            EAST=SOUTH-90
+        }
+        if(EAST>180){
+            WEST=EAST-180
+        }
+        else{
+            WEST=EAST+180
+        }
+        print("NORTH: \(NORTH)")
+        print("SOUTH: \(SOUTH)")
+        print("EAST: \(EAST)")
+        print("WEST: \(WEST)")
+        
+        setThresholdVal(north: NORTH, south: SOUTH, east: EAST, west: WEST)
         
         
     }
-    func setThresholdVal(north: Int, south: Int, east: Int, west: Int){
-        let tNorth = MyLocationManager.Threshold(lower: 0, upper: 1)
-        let tSouth = MyLocationManager.Threshold(lower: 0, upper: 1)
-        let tWest = MyLocationManager.Threshold(lower: 0, upper: 1)
-        let tEast = MyLocationManager.Threshold(lower: 0, upper: 1)
+   
+    func getTVal(val: Double, isLower: Bool) -> Double{
+        var thresholdVal: Double = 0
+        if(isLower){
+            thresholdVal = val - 45
+            if(thresholdVal < 0){
+                thresholdVal = thresholdVal + 360
+            }
+            
+        }
+        else{
+            thresholdVal = val + 45
+            if(thresholdVal > 360){
+                thresholdVal = abs(thresholdVal - 360)
+            }
+        }
+        return thresholdVal
+    }
+    func setThresholdVal(north: Double, south: Double, east: Double, west: Double){
+        let tNorth = MyLocationManager.Threshold(lower: getTVal(val: north, isLower: true), upper: getTVal(val: north, isLower: false))
+        let tSouth = MyLocationManager.Threshold(lower: getTVal(val: south,isLower: true), upper: getTVal(val: south, isLower: false))
+        let tWest = MyLocationManager.Threshold(lower: getTVal(val: west, isLower: true), upper: getTVal(val: west, isLower: false))
+        let tEast = MyLocationManager.Threshold(lower: getTVal(val: east, isLower: true), upper: getTVal(val: east, isLower: false))
         MyLocationManager.headings = MyLocationManager.Headings(north: tNorth, south: tSouth, west: tWest, east: tEast)
+        isCompassCalibrated = true
     }
+    func currentBeaconKnown(closestBeacon: Int){
+        
+        var str: String!
+        if(closestBeacon == MyLocationManager.Beacon.ECE_OFFICE.rawValue){
+            str = "ECE Office"
+        }
+        else if(closestBeacon == MyLocationManager.Beacon.WEST_TINTERSECTION.rawValue){
+            str = "ALMOST ECE"
+        }
+        else if(closestBeacon == MyLocationManager.Beacon.EAST_TINTERSECTION.rawValue){
+            str = "ALMOST BATHROOM"
+        }
+        else if(closestBeacon == MyLocationManager.Beacon.SMALL_HALL.rawValue){
+            str = "SMALL HALL"
+        }
+        else if(closestBeacon == MyLocationManager.Beacon.KUHL_OFFICE.rawValue){
+            str = "KUHL OFFICE"
+        }
+        else{
+            str = "BATHROOM"
+        }
+        text.text = str
+        //print("in here")
+    }
+    func currentKnownHeading(heading: String) {
+        closestWorkstation.text = heading
+    }
+    
 
 
 }

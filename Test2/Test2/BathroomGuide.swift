@@ -19,7 +19,7 @@ class BathroomGuide : DestinationGuide {
             moveSouth()
         }
         else if(closestBeacon == MyLocationManager.Beacon.SMALL_HALL.rawValue || closestBeacon == MyLocationManager.Beacon.EAST_TINTERSECTION.rawValue || closestBeacon == MyLocationManager.Beacon.KUHL_OFFICE.rawValue){
-            moveEast()
+            moveWest()
         }
     }
 }

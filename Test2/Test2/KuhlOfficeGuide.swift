@@ -17,13 +17,13 @@ class KuhlOfficeGuide : DestinationGuide {
             arrived()
         }
         else if(closestBeacon == MyLocationManager.Beacon.EAST_TINTERSECTION.rawValue){
-            moveWest()
+            moveEast()
         }
         else if(closestBeacon == MyLocationManager.Beacon.BATHROOM.rawValue) {
             moveNorth()
         }
         else if(closestBeacon == MyLocationManager.Beacon.SMALL_HALL.rawValue || closestBeacon == MyLocationManager.Beacon.EAST_TINTERSECTION.rawValue){
-            moveEast()
+            moveWest()
         }
         else if(closestBeacon == MyLocationManager.Beacon.ECE_OFFICE.rawValue){
             moveSouth()

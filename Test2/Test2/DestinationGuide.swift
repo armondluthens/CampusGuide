@@ -11,7 +11,10 @@ var destinationGuide: DestinationGuide!
 
 protocol CommandReceiver {
     
-    func reveiceNewCommand(command: MyLocationManager.Direction);
+    func reveiceNewCommand(command: MyLocationManager.Direction)
+    
+    func currentHeading(heading: String)
+    
 }
 
 class DestinationGuide: NSObject {
@@ -22,12 +25,15 @@ class DestinationGuide: NSObject {
         self.delegate = delegate
     }
     
-    func goToDesitation(closestBeacon: Int){}
+    func goToDesitation(closestBeacon: Int){
+        
+    }
     
     
     func isFacingSouth() -> Bool {
         if((MyLocationManager.currentHeading) > Double(MyLocationManager.headings.south.lower) &&
             (MyLocationManager.currentHeading) < Double(MyLocationManager.headings.south.upper)){
+            delegate.currentHeading(heading: "SOUTH")
             return true
         }
         else{
@@ -40,12 +46,23 @@ class DestinationGuide: NSObject {
     
     func isFacingNorth() -> Bool {
 //        print("is facing north")
-//        print("current heading")
-//        print(MyLocationManager.currentHeading)
-//        print(Double(MyLocationManager.headings.north.lower))
-        if((MyLocationManager.currentHeading) > Double(MyLocationManager.headings.north.lower) &&
-            (MyLocationManager.currentHeading) < Double(MyLocationManager.headings.north.upper)){
+        print("current heading north: \(MyLocationManager.currentHeading)")
+        print("north: > \(Double(MyLocationManager.headings.north.lower)) < \(Double(MyLocationManager.headings.north.upper))")
+       // print(Double(MyLocationManager.headings.north.lower))
+       // print(Double(MyLocationManager.headings.north.upper))
+        var lowerIncrease: Double = 0.0
+        var upperIncrease: Double = 0.0
+        if(MyLocationManager.headings.north.lower > 300 && MyLocationManager.currentHeading < 50){
+            lowerIncrease = 360
+        }
+        else if(MyLocationManager.headings.north.lower < 50 && MyLocationManager.currentHeading > 300){
+            upperIncrease = -360
+        }
+        if((MyLocationManager.currentHeading + lowerIncrease) > Double(MyLocationManager.headings.north.lower) &&
+            (MyLocationManager.currentHeading) < abs(Double(MyLocationManager.headings.north.upper + upperIncrease))){
+            delegate.currentHeading(heading: "NORTH")
             return true
+            
         }
         else{
             return false
@@ -56,6 +73,7 @@ class DestinationGuide: NSObject {
     func isFacingEast() -> Bool {
         if((MyLocationManager.currentHeading) > Double(MyLocationManager.headings.east.lower) &&
             (MyLocationManager.currentHeading) < Double(MyLocationManager.headings.east.upper)){
+            delegate.currentHeading(heading: "EAST")
             return true
         }
         else{
@@ -66,6 +84,7 @@ class DestinationGuide: NSObject {
     func isFacingWest() -> Bool {
         if((MyLocationManager.currentHeading) > Double(MyLocationManager.headings.west.lower) &&
             (MyLocationManager.currentHeading) < Double(MyLocationManager.headings.west.upper)){
+            delegate.currentHeading(heading: "WEST")
             return true
         }
         else{
@@ -84,11 +103,11 @@ class DestinationGuide: NSObject {
         }
         else if(isFacingEast()){
             print("right")
-            turnRight()
+            turnLeft()
         }
         else if(isFacingWest()){
             print("left")
-            turnLeft();
+            turnRight();
         }
         else{
             print("error determining orientation")
@@ -103,10 +122,10 @@ class DestinationGuide: NSObject {
             
         }
         else if(isFacingEast()){
-            turnLeft()
+            turnRight()
         }
         else if(isFacingWest()){
-            turnRight();
+            turnLeft();
         }
         else{
             print("error determining orientation")
@@ -114,10 +133,10 @@ class DestinationGuide: NSObject {
     }
     func moveEast(){
         if(isFacingNorth()){
-            turnLeft()
+            turnRight()
         }
         else if(isFacingSouth()){
-            turnRight()
+            turnLeft()
         }
         else if(isFacingEast()){
             moveStraight()
@@ -131,10 +150,10 @@ class DestinationGuide: NSObject {
     }
     func moveWest(){
         if(isFacingNorth()){
-            turnRight()
+            turnLeft()
         }
         else if(isFacingSouth()){
-           turnLeft()
+           turnRight()
         }
         else if(isFacingEast()){
            turnAround()

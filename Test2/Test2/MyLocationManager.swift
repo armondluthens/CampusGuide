@@ -16,18 +16,22 @@ protocol NavigationInstructor{
     
     func receivedNewInstruction(command: String)
     
-    func calibrateCommpass(heading: CLHeading)
+    func calibrateCommpass(initialReading: Double)
+    
+    func currentBeaconKnown(closestBeacon: Int)
+    
+    func currentKnownHeading(heading: String)
 }
 
 class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     
     enum Beacon: Int {
-        case ECE_OFFICE = 62098
-        case WEST_TINTERSECTION = 73
-        case SMALL_HALL = 4053
-        case KUHL_OFFICE = 28583
-        case EAST_TINTERSECTION = 43767
-        case BATHROOM = 49435
+        case ECE_OFFICE = 62098 // w1
+        case WEST_TINTERSECTION = 73 // w2
+        case SMALL_HALL = 4053 // w3
+        case KUHL_OFFICE = 28583 //w4
+        case EAST_TINTERSECTION = 43767 //w5
+        case BATHROOM = 49435 //w6
         
     }
     enum Direction:Int {
@@ -36,8 +40,8 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     var directions: Array<String> = ["TURN RIGHT", "TURN LEFT", "MAKE A U TURN", "MOVE STRAIGHT FORWARD", "YOU HAVE ARRIVED" ]
     
     struct Threshold{
-        var lower: Int = 0
-        var upper: Int = 0
+        var lower: Double = 0
+        var upper: Double = 0
     }
     
     struct Headings {
@@ -59,6 +63,7 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     private var selectedDestination: MyLocations.Location!
     private var delegate: NavigationInstructor!
     private var calibrate: Int = 0
+    private var doCalibrate: Bool = false
     
     static var stopNav: Bool = false
     static var headings: Headings!
@@ -66,12 +71,13 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     // motion test
     // let motionManager: CMMotionManager = CMMotionManager()
     
-    init(destination: MyLocations.Location, delegate: NavigationInstructor){
+    init(destination: MyLocations.Location, delegate: NavigationInstructor, calibrate: Bool){
         
         super.init()
         self.delegate = delegate
         selectedDestination = destination
         locationManager.delegate = self
+        doCalibrate = calibrate
         
         createGuide()
         
@@ -106,6 +112,9 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         delegate.receivedNewInstruction(command: directions[command.rawValue])
         
     }
+    func currentHeading(heading: String){
+        delegate.currentKnownHeading(heading: heading)
+    }
     // called when one or more beacons are in range
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         
@@ -114,7 +123,10 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         {
             let closestBeacon = knownBeacons[0] as CLBeacon
             let closest:Int = closestBeacon.minor.intValue
-            if ( calibrate >= 2 && !MyLocationManager.stopNav) {destinationGuide.goToDesitation(closestBeacon: closest)}
+            if ( calibrate >= 2 && !MyLocationManager.stopNav) {
+                delegate.currentBeaconKnown(closestBeacon: closest)
+                destinationGuide.goToDesitation(closestBeacon: closest)
+            }
         }
        
         
@@ -124,11 +136,14 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         // let str: String = "accuracy \(newHeading.headingAccuracy)" + "heading \(newHeading.magneticHeading)\n"
        // print(str)
         
-        if(calibrate == 1){
+        if(calibrate == 1 && doCalibrate){
             print("calibrate compass")
-            delegate.calibrateCommpass(heading: newHeading)
+            delegate.calibrateCommpass(initialReading: newHeading.magneticHeading)
         }
         calibrate = calibrate + 1
         MyLocationManager.currentHeading = newHeading.magneticHeading
+        //delegate.currentKnownHeading(heading: MyLocationManager.currentHeading)
+        
     }
+
 }
