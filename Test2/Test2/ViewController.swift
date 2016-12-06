@@ -124,190 +124,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
     }
     
     
-    func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
-        //beacons
-        let w1 = 62098
-        let w2 = 73
-        let w3 = 4053
-        let w4 = 28583
-        let w5 = 43767
-        let w6 = 49435
-        
-        var orientationThreshold=0
-        // 1 = NORTH
-        // 2 = SOUTH
-        // 3 = EAST
-        // 4 = WEST
-        
-        //walking commands
-        let commandLeft = "Stop. Turn in place to your left"
-        let commandRight = "Stop. Turn in place to your right"
-        let commandStraight = "Proceed Forward"
-        let commandDestination = "You have reached your destination"
-        
-        //closest beacon
-        var closest=0
-        var currentDirections=""
-        var curDes=""
-    
-        //printing beacon info to console for testing
-        //print(beacons)
-        
-        let knownBeacons = beacons.filter{ $0.proximity != CLProximity.unknown }
-        if (knownBeacons.count > 0) {
-            
-            let closestBeacon = knownBeacons[0] as CLBeacon
-            closest = closestBeacon.minor.intValue
-            
-            if(selectedDestination == 1){
-                curDes = "Selected Destination: ECE Office"
-            }
-            else if(selectedDestination == 2){
-                curDes = "Selected Destination: Kuhl's Office"
-            }
-            else{
-                curDes = "Selected Destination: 4th Floor Bathroom"
-            }
-            self.displaySelectDestination.text = curDes
-            
-            
-            if(closest == w1){
-                if (selectedDestination == 1){
-                    currentDirections = commandDestination
-                }
-                else {
-                    if(currentHeading < Double(SOUTH-45)){
-                        currentDirections = commandRight
-                    }
-                    else if(currentHeading > Double(SOUTH+45)){
-                        currentDirections = commandLeft
-                    }
-                    else{
-                        currentDirections = commandStraight
-                    }
-                }
-            }
-            else if(closest == w2){
-                                
-                if (selectedDestination == 1){
-                    if(currentHeading < Double(SOUTHWEST) && currentHeading > Double(SOUTH+1)){
-                        currentDirections = commandRight
-                    }
-                    else if(currentHeading > Double(SOUTHEAST) && currentHeading < Double(SOUTH)){
-                        currentDirections = commandLeft
-                    }
-                    else{
-                        currentDirections = commandStraight
-                    }
-                }
-                else{
-                    if(currentHeading < Double(SOUTHWEST)){
-                        currentDirections = commandRight
-                    }
-                    else if(currentHeading > Double(NORTHWEST)){
-                        currentDirections = commandLeft
-                    }
-                    else{
-                        currentDirections = commandStraight
-                    }
-                }
-            }
-            else if(closest == w3){
-                if (selectedDestination == 1){
-                    if(currentHeading > Double(SOUTHEAST)){
-                        currentDirections = commandLeft
-                    }
-                    else{
-                        currentDirections = commandStraight
-                    }
-                }
-                else{
-                    if(currentHeading < Double(SOUTHWEST)){
-                        currentDirections = commandRight
-                    }
-                    else if(currentHeading > Double(NORTHWEST)){
-                        currentDirections = commandLeft
-                    }
-                    else{
-                        currentDirections = commandStraight
-                    }
-                }
-            }
-            else if(closest == w4){
-                if (selectedDestination == 1){
-                    if(currentHeading > Double(SOUTHEAST)){
-                        currentDirections = commandLeft
-                    }
-                    else{
-                        currentDirections = commandStraight
-                    }
-                }
-                else if (selectedDestination == 2){
-                    currentDirections = commandDestination
-                    
-                }
-                else{
-                    if(currentHeading < Double(SOUTHWEST)){
-                        currentDirections = commandRight
-                    }
-                    else if(currentHeading > Double(NORTHWEST)){
-                        currentDirections = commandLeft
-                    }
-                    else{
-                        currentDirections = commandStraight
-                    }
-                }
-            }
-            else if(closest == w5){
-                if (selectedDestination == 1 || selectedDestination == 2){
-                    if(currentHeading > Double(SOUTHEAST)){
-                        currentDirections = commandLeft
-                    }
-                    else{
-                        currentDirections = commandStraight
-                    }
-                }
-                else{
-                    if(currentHeading < Double(SOUTHEAST)){
-                        currentDirections = commandRight
-                    }
-                    if(currentHeading > Double(SOUTHWEST)){
-                        currentDirections = commandRight
-                    }
-                    else{
-                        currentDirections = commandStraight
-                    }
-                }
-            }
-            
-            //You are closest to Worksation 6
-            else if(closest == w6){
-                if (selectedDestination == 1 || selectedDestination == 2){
-                    currentDirections = "Turn Around"
-                }
-                else{
-                    currentDirections = commandDestination
-                }
-            }
-            
-            //call speech function (currentDirections)
-            textToSpeech(wordsToSay: currentDirections)
-            
-            //print the beacon you are closest to
-            self.text.text = self.workstation[closestBeacon.minor.intValue]
-            
-            //provide current directions to user
-            self.directionsMessage.text = currentDirections
-        }
-        
-    }
- 
-    
-    /******************************************************************************************
-                Navigation code WITHOUT COMPASS HEADING
-     ******************************************************************************************/
 //    func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
-//        
+//        //beacons
 //        let w1 = 62098
 //        let w2 = 73
 //        let w3 = 4053
@@ -315,15 +133,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
 //        let w5 = 43767
 //        let w6 = 49435
 //        
-//        let commandLeft = "Turn left and proceed forward"
-//        let commandRight = "Turn right and proceed forward"
+//        var orientationThreshold=0
+//        // 1 = NORTH
+//        // 2 = SOUTH
+//        // 3 = EAST
+//        // 4 = WEST
+//        
+//        //walking commands
+//        let commandLeft = "Stop. Turn in place to your left"
+//        let commandRight = "Stop. Turn in place to your right"
 //        let commandStraight = "Proceed Forward"
 //        let commandDestination = "You have reached your destination"
-//        let commandTurnAround = "Turn around and proceed forward"
 //        
+//        //closest beacon
 //        var closest=0
 //        var currentDirections=""
 //        var curDes=""
+//    
+//        //printing beacon info to console for testing
+//        //print(beacons)
 //        
 //        let knownBeacons = beacons.filter{ $0.proximity != CLProximity.unknown }
 //        if (knownBeacons.count > 0) {
@@ -342,58 +170,120 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
 //            }
 //            self.displaySelectDestination.text = curDes
 //            
+//            
 //            if(closest == w1){
 //                if (selectedDestination == 1){
 //                    currentDirections = commandDestination
 //                }
-//                else{
-//                    currentDirections = commandStraight
+//                else {
+//                    if(currentHeading < Double(SOUTH-45)){
+//                        currentDirections = commandRight
+//                    }
+//                    else if(currentHeading > Double(SOUTH+45)){
+//                        currentDirections = commandLeft
+//                    }
+//                    else{
+//                        currentDirections = commandStraight
+//                    }
 //                }
 //            }
 //            else if(closest == w2){
+//                                
 //                if (selectedDestination == 1){
-//                    currentDirections = commandTurnAround
+//                    if(currentHeading < Double(SOUTHWEST) && currentHeading > Double(SOUTH+1)){
+//                        currentDirections = commandRight
+//                    }
+//                    else if(currentHeading > Double(SOUTHEAST) && currentHeading < Double(SOUTH)){
+//                        currentDirections = commandLeft
+//                    }
+//                    else{
+//                        currentDirections = commandStraight
+//                    }
 //                }
 //                else{
-//                    currentDirections = commandRight
+//                    if(currentHeading < Double(SOUTHWEST)){
+//                        currentDirections = commandRight
+//                    }
+//                    else if(currentHeading > Double(NORTHWEST)){
+//                        currentDirections = commandLeft
+//                    }
+//                    else{
+//                        currentDirections = commandStraight
+//                    }
 //                }
 //            }
 //            else if(closest == w3){
 //                if (selectedDestination == 1){
-//                    currentDirections = commandTurnAround
+//                    if(currentHeading > Double(SOUTHEAST)){
+//                        currentDirections = commandLeft
+//                    }
+//                    else{
+//                        currentDirections = commandStraight
+//                    }
 //                }
 //                else{
-//                    currentDirections = commandStraight
+//                    if(currentHeading < Double(SOUTHWEST)){
+//                        currentDirections = commandRight
+//                    }
+//                    else if(currentHeading > Double(NORTHWEST)){
+//                        currentDirections = commandLeft
+//                    }
+//                    else{
+//                        currentDirections = commandStraight
+//                    }
 //                }
 //            }
 //            else if(closest == w4){
 //                if (selectedDestination == 1){
-//                    currentDirections = commandTurnAround
+//                    if(currentHeading > Double(SOUTHEAST)){
+//                        currentDirections = commandLeft
+//                    }
+//                    else{
+//                        currentDirections = commandStraight
+//                    }
 //                }
-//                else if(selectedDestination == 2){
+//                else if (selectedDestination == 2){
 //                    currentDirections = commandDestination
+//                    
 //                }
 //                else{
-//                    currentDirections = commandStraight
+//                    if(currentHeading < Double(SOUTHWEST)){
+//                        currentDirections = commandRight
+//                    }
+//                    else if(currentHeading > Double(NORTHWEST)){
+//                        currentDirections = commandLeft
+//                    }
+//                    else{
+//                        currentDirections = commandStraight
+//                    }
 //                }
 //            }
 //            else if(closest == w5){
-//                if (selectedDestination == 1){
-//                    currentDirections = commandTurnAround
-//                }
-//                else if(selectedDestination == 2){
-//                    currentDirections = commandTurnAround
+//                if (selectedDestination == 1 || selectedDestination == 2){
+//                    if(currentHeading > Double(SOUTHEAST)){
+//                        currentDirections = commandLeft
+//                    }
+//                    else{
+//                        currentDirections = commandStraight
+//                    }
 //                }
 //                else{
-//                    currentDirections = commandLeft
+//                    if(currentHeading < Double(SOUTHEAST)){
+//                        currentDirections = commandRight
+//                    }
+//                    if(currentHeading > Double(SOUTHWEST)){
+//                        currentDirections = commandRight
+//                    }
+//                    else{
+//                        currentDirections = commandStraight
+//                    }
 //                }
 //            }
+//            
+//            //You are closest to Worksation 6
 //            else if(closest == w6){
-//                if (selectedDestination == 1){
-//                    currentDirections = commandTurnAround
-//                }
-//                else if(selectedDestination == 2){
-//                    currentDirections = commandTurnAround
+//                if (selectedDestination == 1 || selectedDestination == 2){
+//                    currentDirections = "Turn Around"
 //                }
 //                else{
 //                    currentDirections = commandDestination
@@ -402,15 +292,125 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
 //            
 //            //call speech function (currentDirections)
 //            textToSpeech(wordsToSay: currentDirections)
+//            
 //            //print the beacon you are closest to
 //            self.text.text = self.workstation[closestBeacon.minor.intValue]
 //            
 //            //provide current directions to user
 //            self.directionsMessage.text = currentDirections
-//            
 //        }
 //        
 //    }
+ 
+    
+    /******************************************************************************************
+                Navigation code WITHOUT COMPASS HEADING
+     ******************************************************************************************/
+    func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
+        
+        let w1 = 62098
+        let w2 = 73
+        let w3 = 4053
+        let w4 = 28583
+        let w5 = 43767
+        let w6 = 49435
+        
+        let commandLeft = "Turn left and proceed forward"
+        let commandRight = "Turn right and proceed forward"
+        let commandStraight = "Proceed Forward"
+        let commandDestination = "You have reached your destination"
+        let commandTurnAround = "Turn around and proceed forward"
+        
+        var closest=0
+        var currentDirections=""
+        var curDes=""
+        
+        let knownBeacons = beacons.filter{ $0.proximity != CLProximity.unknown }
+        if (knownBeacons.count > 0) {
+            
+            let closestBeacon = knownBeacons[0] as CLBeacon
+            closest = closestBeacon.minor.intValue
+            
+            if(selectedDestination == 1){
+                curDes = "Selected Destination: ECE Office"
+            }
+            else if(selectedDestination == 2){
+                curDes = "Selected Destination: Kuhl's Office"
+            }
+            else{
+                curDes = "Selected Destination: 4th Floor Bathroom"
+            }
+            self.displaySelectDestination.text = curDes
+            
+            if(closest == w1){
+                if (selectedDestination == 1){
+                    currentDirections = commandDestination
+                }
+                else{
+                    currentDirections = commandStraight
+                }
+            }
+            else if(closest == w2){
+                if (selectedDestination == 1){
+                    currentDirections = commandTurnAround
+                }
+                else{
+                    currentDirections = commandRight
+                }
+            }
+            else if(closest == w3){
+                if (selectedDestination == 1){
+                    currentDirections = commandTurnAround
+                }
+                else{
+                    currentDirections = commandStraight
+                }
+            }
+            else if(closest == w4){
+                if (selectedDestination == 1){
+                    currentDirections = commandTurnAround
+                }
+                else if(selectedDestination == 2){
+                    currentDirections = commandDestination
+                }
+                else{
+                    currentDirections = commandStraight
+                }
+            }
+            else if(closest == w5){
+                if (selectedDestination == 1){
+                    currentDirections = commandTurnAround
+                }
+                else if(selectedDestination == 2){
+                    currentDirections = commandTurnAround
+                }
+                else{
+                    currentDirections = commandLeft
+                }
+            }
+            else if(closest == w6){
+                if (selectedDestination == 1){
+                    currentDirections = commandTurnAround
+                }
+                else if(selectedDestination == 2){
+                    currentDirections = commandTurnAround
+                }
+                else{
+                    currentDirections = commandDestination
+                }
+            }
+            
+            //call speech function (currentDirections)
+            textToSpeech(wordsToSay: currentDirections)
+            //print the beacon you are closest to
+            self.text.text = self.workstation[closestBeacon.minor.intValue]
+            
+            //provide current directions to user
+            self.directionsMessage.text = currentDirections
+            
+        }
+        
+    }
 
     
     /******************************************************************************************
@@ -420,7 +420,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MyBluetoothMa
         headingReadCount = headingReadCount+1
         currentHeading = newHeading.magneticHeading
 
-        print("initial read in COMPASS FUNC: \(currentHeading)")
+        print("Initial Compass Reading: \(currentHeading)")
         
         if(calibrated == false && headingReadCount==5){
             let curHeadingInt = Int(currentHeading)
