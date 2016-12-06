@@ -1,11 +1,10 @@
 /**
  * enum to represent all three motors
  */
-#define MOTOR_COUNT 3
+#define MOTOR_COUNT 2
 
 typedef enum Motors{
-  RIGHT = 2,
-  CENTER = 3,
-  LEFT = 4
+  RIGHT = 9,
+  LEFT = 10
 };
 

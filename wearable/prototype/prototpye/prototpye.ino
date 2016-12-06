@@ -5,52 +5,75 @@
 
 const float distance_threshold = 2.0 * 40;
 const float vi = 3.3/512;
-const int motor_pins[MOTOR_COUNT] = {RIGHT, LEFT, CENTER};
+const int motor_pins[MOTOR_COUNT] = {RIGHT, LEFT};
 /**
  * description: initialize I/O pins & set up serial for bluetooth
  * */
 void setup() {
   Serial.begin(9600);
-  #ifdef DEBUG
-    pinMode(13, OUTPUT);
-  #endif  
+  pinMode(7, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT); //Just for test. REMOVE THIS LINE.
+    
   // initialize motor pins to be outputs
-  for(int i = 0; i < MOTOR_COUNT; i++){
-    pinMode(motor_pins[i], OUTPUT);
-  }
+//  for(int i = 0; i < MOTOR_COUNT; i++){
+//    pinMode(motor_pins[i], OUTPUT);
+//  }
+ // digitalWrite(motor_pins[0], OUTPUT)
+  
+  blink();
+  blink();
+  blink();
 }
 /**
  *  reads from the distance sensor, runs bluetooth test
  * */
 void loop() {
-  int distance = read_distance();
-  if(distance <= distance_threshold && distance > 0){
-    #ifdef DEBUG
-      Serial.println("within distance");
-    #endif 
-  }
-  #ifdef DEBUG
+ //  blink();
+//  int distance = read_distance();
+//  if(distance <= distance_threshold && distance > 0){
+//    #ifdef DEBUG
+//      Serial.println("within distance");
+//    #endif 
+//  }
+  
     blue_tooth_test();
-  #endif  
+ 
 }
-#ifdef DEBUG
+void blink(){
+   digitalWrite(7, HIGH);
+   delay(1000);
+   digitalWrite(7, LOW);
+   delay(1000);
+}
+
 void blue_tooth_test(){
+  // blink();
+//  digitalWrite(9, HIGH);
+//  delay(1000);
+//  digitalWrite(9, LOW);
+//  delay(1000);
   // switch LED on & off
-  while (Serial.available()) {
-    char inChar = (char)Serial.read();
+  if (Serial.available()) {
+    blink();
+   // blink();
+    // blink();
+    
+  char inChar = Serial.read();
     switch(inChar) {
       case '1':
-        digitalWrite(13, HIGH);
+       // digitalWrite(7, HIGH);
       break;
       case '0':
-        digitalWrite(13, LOW);
+        // digitalWrite(7, LOW);
       break;
     }
-    vibrate_motors(inChar - 48);
-    Serial.println("sent: " + inChar);
-  }
+   // vibrate_motors(inChar - 48);
+    Serial.write(inChar);
+   }
 }
-#endif
+
 /**
  * description: reads the sonar sensor from the analog pin, and then convert to appropriate range
  * calculate distance from analog input: http://www.maxbotix.com/articles/032.html
@@ -103,15 +126,15 @@ void vibrate_motors(int message){
     pulse_single(LEFT);
   }
   else if(message == MOVE_STRAIGHT){
-    pulse_single(CENTER);
+   // pulse_single(CENTER);
   }
   else if(message == TURN_AROUND){
-    digitalWrite(CENTER, HIGH);
+   // digitalWrite(CENTER, HIGH);
     delay(500);
-    digitalWrite(CENTER, LOW);
-    digitalWrite(CENTER, HIGH);
+    // digitalWrite(CENTER, LOW);
+    // digitalWrite(CENTER, HIGH);
     delay(500);
-    digitalWrite(CENTER, LOW);
+   // digitalWrite(CENTER, LOW);
   }
   else if(message == ARRIVED){
     set_all(HIGH);
