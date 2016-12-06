@@ -193,17 +193,29 @@
 				TargetAttributes = {
 					D9E568171D93002E001293D6 = {
 						CreatedOnToolsVersion = 7.2.1;
+<<<<<<< HEAD
 						DevelopmentTeam = E5UPHMM4U3;
 						LastSwiftMigration = 0800;
 					};
 					D9E5682B1D93002F001293D6 = {
 						CreatedOnToolsVersion = 7.2.1;
 						LastSwiftMigration = 0800;
+=======
+						LastSwiftMigration = 0810;
+					};
+					D9E5682B1D93002F001293D6 = {
+						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0810;
+>>>>>>> 1490ae9edf3e002e78a461c9b6ab144278065c5f
 						TestTargetID = D9E568171D93002E001293D6;
 					};
 					D9E568361D93002F001293D6 = {
 						CreatedOnToolsVersion = 7.2.1;
+<<<<<<< HEAD
 						LastSwiftMigration = 0800;
+=======
+						LastSwiftMigration = 0810;
+>>>>>>> 1490ae9edf3e002e78a461c9b6ab144278065c5f
 						TestTargetID = D9E568171D93002E001293D6;
 					};
 				};
