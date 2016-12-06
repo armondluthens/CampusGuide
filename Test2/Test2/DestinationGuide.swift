@@ -39,9 +39,7 @@ class DestinationGuide: NSObject {
         else{
             return false
         }
-    
-        
-        
+
     }
     
     func isFacingNorth() -> Bool {
