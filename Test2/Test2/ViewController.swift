@@ -14,7 +14,7 @@ import CoreBluetooth
 
 class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, NavigationInstructor {
     
-
+    // new type
     struct NavigationState {
         
         var startRequested:Bool = false
@@ -23,11 +23,11 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
         var inProgress:Bool = false
         var destination:MyLocations.Location!
     }
-    /*----------------------------------------------------------------
-     Define Global Variables
-     ----------------------------------------------------------------*/ 
+    // private variables to keep track of app state
     private var navigationState: NavigationState = NavigationState()
+    private var isCompassCalibrated: Bool = false
     
+    // GUI vars
     @IBOutlet weak var text: UILabel!
     @IBOutlet weak var closestWorkstation: UILabel!
     @IBOutlet weak var directionsMessage: UILabel!
@@ -46,25 +46,28 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
         startNavigation(mydestination: MyLocations.Location.ECE_OFFICE)
     }
     @IBAction func kuhl(_ sender: AnyObject) {
-        startNavigation(mydestination: MyLocations.Location.KUHL_OFFICE)
+        if(isCompassCalibrated){
+            startNavigation(mydestination: MyLocations.Location.KUHL_OFFICE)
+        }
+        
     }
     @IBAction func restroom(_ sender: AnyObject) {
-       startNavigation(mydestination: MyLocations.Location.BATHROOM)
+        if(isCompassCalibrated){
+            startNavigation(mydestination: MyLocations.Location.BATHROOM)
+        }
     }
     override func viewDidLoad() {
-        print("on view load")
         super.viewDidLoad()
         myBluetooth = MyBluetooth(delegate: self)
         // speechRecognizer = SpeechRecognizer(delegate: self)
         speaker = Speaker()
-        
- 
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    // the following methods use voice recognition to control navigation process
     func getNewDestination(){
         navigationState.inProgress = false
         navigationState.destinationConfirmed = false
@@ -73,14 +76,14 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
         
     }
     func startNavigation(mydestination: MyLocations.Location){
+        MyLocationManager.stopNav = false
         myLocationManager = MyLocationManager(destination: mydestination, delegate: self)
         print("START NAVIGATION")
     }
     
-    
-    
-    // starting navigation
+    // call is delegated to this
     func retrievePhrase(command: String){
+        
         // stop while processing command
         speechRecognizer.stopListening()
         if(speechRecognizer.isStartNavCommand(string: command) && !navigationState.startRequested){
@@ -123,19 +126,37 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
         // start listening again now that command is processed
         speechRecognizer.startListening()
     }
+    
+    // function is delegated to us
     func receivedNewInstruction(command: String){
+        
         speaker.speak(wordsToSay: command)
+        directionsMessage.text = command
         if(command == "YOU HAVE ARRIVED"){
             navigationState.startRequested = false
             navigationState.inProgress = false
             navigationState.setDestination = false
             navigationState.destinationConfirmed = false
+            MyLocationManager.stopNav = true
             
         }
     }
+    
+    // should be called right away
     func calibrateCommpass(heading: CLHeading) {
+        isCompassCalibrated = true
+        setThresholdVal(north: 0, south: 0, east: 0, west: 0)
+        
         
     }
+    func setThresholdVal(north: Int, south: Int, east: Int, west: Int){
+        let tNorth = MyLocationManager.Threshold(lower: 0, upper: 1)
+        let tSouth = MyLocationManager.Threshold(lower: 0, upper: 1)
+        let tWest = MyLocationManager.Threshold(lower: 0, upper: 1)
+        let tEast = MyLocationManager.Threshold(lower: 0, upper: 1)
+        MyLocationManager.headings = MyLocationManager.Headings(north: tNorth, south: tSouth, west: tWest, east: tEast)
+    }
+
 
 }
 

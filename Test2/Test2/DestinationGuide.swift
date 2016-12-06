@@ -7,7 +7,7 @@
 //
 
 
-weak var destinationGuide: DestinationGuide!
+var destinationGuide: DestinationGuide!
 
 protocol CommandReceiver {
     
@@ -26,31 +26,68 @@ class DestinationGuide: NSObject {
     
     
     func isFacingSouth() -> Bool {
-        return false
+        if((MyLocationManager.currentHeading) > Double(MyLocationManager.headings.south.lower) &&
+            (MyLocationManager.currentHeading) < Double(MyLocationManager.headings.south.upper)){
+            return true
+        }
+        else{
+            return false
+        }
+    
+        
+        
     }
     
     func isFacingNorth() -> Bool {
-        return false
+//        print("is facing north")
+//        print("current heading")
+//        print(MyLocationManager.currentHeading)
+//        print(Double(MyLocationManager.headings.north.lower))
+        if((MyLocationManager.currentHeading) > Double(MyLocationManager.headings.north.lower) &&
+            (MyLocationManager.currentHeading) < Double(MyLocationManager.headings.north.upper)){
+            return true
+        }
+        else{
+            return false
+        }
+      //  return false
     }
     
     func isFacingEast() -> Bool {
-        return false
+        if((MyLocationManager.currentHeading) > Double(MyLocationManager.headings.east.lower) &&
+            (MyLocationManager.currentHeading) < Double(MyLocationManager.headings.east.upper)){
+            return true
+        }
+        else{
+            return false
+        }
     }
     
     func isFacingWest() -> Bool {
-        return false
+        if((MyLocationManager.currentHeading) > Double(MyLocationManager.headings.west.lower) &&
+            (MyLocationManager.currentHeading) < Double(MyLocationManager.headings.west.upper)){
+            return true
+        }
+        else{
+            return false
+        }
     }
     func moveNorth(){
+        print("move north")
         if(isFacingNorth()){
+            print("straight")
             moveStraight()
         }
         else if(isFacingSouth()){
+            print("u turn")
             turnAround();
         }
         else if(isFacingEast()){
+            print("right")
             turnRight()
         }
         else if(isFacingWest()){
+            print("left")
             turnLeft();
         }
         else{

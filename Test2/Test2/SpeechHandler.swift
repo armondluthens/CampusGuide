@@ -18,10 +18,6 @@ protocol PhraseRetriever {
 
 class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
     
-    private var openEarsEventsObserver: OEEventsObserver! // forced unwrapping
-    private var startupFailedDueToLackOfPermissions: Bool = false;
-    var recognizedWords: Array<String> = []
-    
     struct Range {
         var start: Int
         var end: Int
@@ -38,6 +34,10 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
         var eceOffice: Range = Range(start: 16, end: 16)
         var numCategories: Int = 7
     }
+    
+    private var openEarsEventsObserver: OEEventsObserver! // forced unwrapping
+    private var startupFailedDueToLackOfPermissions: Bool = false;
+    private var recognizedWords: Array<String> = []
     /**
      * path to language model which holds the words
      **/
@@ -59,7 +59,7 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
         loadOpenEars()
     }
     
-    func createRecognizedWords(){
+    private func createRecognizedWords(){
         
         // add anything here that you want to be recognized.
         // must be in capital letters
@@ -198,11 +198,11 @@ class SpeechRecognizer: NSObject, OEEventsObserverDelegate {
     }
 }
 class Speaker: NSObject {
-    var previousDateTime = NSDate()
-    var synth: AVSpeechSynthesizer!
-    var myUtterance: AVSpeechUtterance!
-    var curWords: String!
-    var prevWords: String!
+    private var previousDateTime = NSDate()
+    private var synth: AVSpeechSynthesizer!
+    private var myUtterance: AVSpeechUtterance!
+    private var curWords: String!
+    private var prevWords: String!
     
     override init(){
         super.init()
@@ -214,7 +214,7 @@ class Speaker: NSObject {
     
     func speak(wordsToSay: String) {
        
-        var elaspedTime = Date().timeIntervalSince(previousDateTime as Date)
+        let elaspedTime = Date().timeIntervalSince(previousDateTime as Date)
         previousDateTime = NSDate()
         
         prevWords = curWords

@@ -34,6 +34,18 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         case RIGHT = 0, LEFT, UTURN, STRAIGHT, ARRIVED
     }
     var directions: Array<String> = ["TURN RIGHT", "TURN LEFT", "MAKE A U TURN", "MOVE STRAIGHT FORWARD", "YOU HAVE ARRIVED" ]
+    
+    struct Threshold{
+        var lower: Int = 0
+        var upper: Int = 0
+    }
+    
+    struct Headings {
+        var north: Threshold!
+        var south: Threshold!
+        var west:  Threshold!
+        var east: Threshold!
+    }
    
     // core location manager
     let locationManager: CLLocationManager = CLLocationManager()
@@ -42,13 +54,14 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     let region = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "B9407F30-F5F8-466E-AFF9-25556B57FE6D")! as UUID, identifier: "Estimotes")
     
     // NOTE: might make this it's own object
-    private var currentHeading: Double = 0.0
+    static var currentHeading: Double = 0.0
     
     private var selectedDestination: MyLocations.Location!
-    
-    var command: Direction!
     private var delegate: NavigationInstructor!
-    private var calibrate: Bool = false
+    private var calibrate: Int = 0
+    
+    static var stopNav: Bool = false
+    static var headings: Headings!
     
     // motion test
     // let motionManager: CMMotionManager = CMMotionManager()
@@ -59,8 +72,6 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         self.delegate = delegate
         selectedDestination = destination
         locationManager.delegate = self
-        
-        // motionManager.deviceMotionUpdateInterval = 0.5
         
         createGuide()
         
@@ -74,12 +85,15 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         // start getting compass heading with location delegate
         locationManager.startUpdatingHeading()
         
+        print("end of constructor")
+        
     }
     func createGuide(){
         if(selectedDestination == MyLocations.Location.KUHL_OFFICE){
             destinationGuide = KuhlOfficeGuide(delegate: self)
         }
         else if(selectedDestination == MyLocations.Location.ECE_OFFICE){
+            print("des guide is ece office")
             destinationGuide = ECEOfficeGuide(delegate: self)
         }
         else if(selectedDestination == MyLocations.Location.BATHROOM){
@@ -100,18 +114,21 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         {
             let closestBeacon = knownBeacons[0] as CLBeacon
             let closest:Int = closestBeacon.minor.intValue
-            destinationGuide.goToDesitation(closestBeacon: closest)
+            if ( calibrate >= 2 && !MyLocationManager.stopNav) {destinationGuide.goToDesitation(closestBeacon: closest)}
         }
+       
         
     }
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        let str: String = "accuracy \(newHeading.headingAccuracy)" + "heading \(newHeading.magneticHeading)\n"
-        print(str)
         
-        if(calibrate == true){
-            delegate.calibrateCommpass(heading: CLHeading)
+        // let str: String = "accuracy \(newHeading.headingAccuracy)" + "heading \(newHeading.magneticHeading)\n"
+       // print(str)
+        
+        if(calibrate == 1){
+            print("calibrate compass")
+            delegate.calibrateCommpass(heading: newHeading)
         }
-        calibrate = true
+        calibrate = calibrate + 1
+        MyLocationManager.currentHeading = newHeading.magneticHeading
     }
-    
 }
