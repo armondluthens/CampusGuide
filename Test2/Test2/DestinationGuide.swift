@@ -45,11 +45,9 @@ class DestinationGuide: NSObject {
     }
     
     func isFacingNorth() -> Bool {
-//        print("is facing north")
         print("current heading north: \(MyLocationManager.currentHeading)")
         print("north: > \(Double(MyLocationManager.headings.north.lower)) < \(Double(MyLocationManager.headings.north.upper))")
-       // print(Double(MyLocationManager.headings.north.lower))
-       // print(Double(MyLocationManager.headings.north.upper))
+        
         var lowerIncrease: Double = 0.0
         var upperIncrease: Double = 0.0
         if(MyLocationManager.headings.north.lower > 300 && MyLocationManager.currentHeading < 50){
@@ -68,6 +66,7 @@ class DestinationGuide: NSObject {
             return false
         }
       //  return false
+        
     }
     
     func isFacingEast() -> Bool {
@@ -93,11 +92,11 @@ class DestinationGuide: NSObject {
     }
     func moveNorth(){
         print("move north")
-        if(isFacingNorth()){
-            print("straight")
-            moveStraight()
-        }
-        else if(isFacingSouth()){
+//        if(isFacingNorth()){
+//            print("straight")
+//            moveStraight()
+//        }
+        if(isFacingSouth()){
             print("u turn")
             turnAround();
         }
@@ -110,14 +109,15 @@ class DestinationGuide: NSObject {
             turnRight();
         }
         else{
-            print("error determining orientation")
+            //print("error determining orientation")
+            moveStraight() //default to north
         }
     }
     func moveSouth(){
-        if(isFacingNorth()){
-            turnAround()
-        }
-        else if(isFacingSouth()){
+//        if(isFacingNorth()){
+//            turnAround()
+//        }
+        if(isFacingSouth()){
             moveStraight()
             
         }
@@ -128,14 +128,15 @@ class DestinationGuide: NSObject {
             turnLeft();
         }
         else{
-            print("error determining orientation")
+            //print("error determining orientation")
+            turnAround() //default to north
         }
     }
     func moveEast(){
-        if(isFacingNorth()){
-            turnRight()
-        }
-        else if(isFacingSouth()){
+//        if(isFacingNorth()){
+//            turnRight()
+//        }
+        if(isFacingSouth()){
             turnLeft()
         }
         else if(isFacingEast()){
@@ -145,14 +146,15 @@ class DestinationGuide: NSObject {
             turnAround()
         }
         else{
-            print("error determining orientation")
+            //print("error determining orientation")
+            turnRight() //default to north
         }
     }
     func moveWest(){
-        if(isFacingNorth()){
-            turnLeft()
-        }
-        else if(isFacingSouth()){
+//        if(isFacingNorth()){
+//            turnLeft()
+//        }
+        if(isFacingSouth()){
            turnRight()
         }
         else if(isFacingEast()){
@@ -163,6 +165,7 @@ class DestinationGuide: NSObject {
         }
         else{
             print("error determining orientation")
+            turnLeft() //default to north
         }
     }
     func turnRight() {

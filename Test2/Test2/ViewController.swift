@@ -198,6 +198,7 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
         }
         return thresholdVal
     }
+    
     func setThresholdVal(north: Double, south: Double, east: Double, west: Double){
         let tNorth = MyLocationManager.Threshold(lower: getTVal(val: north, isLower: true), upper: getTVal(val: north, isLower: false))
         let tSouth = MyLocationManager.Threshold(lower: getTVal(val: south,isLower: true), upper: getTVal(val: south, isLower: false))
