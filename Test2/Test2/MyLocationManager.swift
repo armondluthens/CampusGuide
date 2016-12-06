@@ -15,6 +15,8 @@ var myLocationManager: MyLocationManager!
 protocol NavigationInstructor{
     
     func receivedNewInstruction(command: String)
+    
+    func calibrateCommpass(heading: CLHeading)
 }
 
 class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
@@ -46,6 +48,7 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     
     var command: Direction!
     private var delegate: NavigationInstructor!
+    private var calibrate: Bool = false
     
     // motion test
     // let motionManager: CMMotionManager = CMMotionManager()
@@ -70,7 +73,6 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
         
         // start getting compass heading with location delegate
         locationManager.startUpdatingHeading()
-        
         
     }
     func createGuide(){
@@ -105,6 +107,11 @@ class MyLocationManager: NSObject, CLLocationManagerDelegate, CommandReceiver {
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         let str: String = "accuracy \(newHeading.headingAccuracy)" + "heading \(newHeading.magneticHeading)\n"
         print(str)
+        
+        if(calibrate == true){
+            delegate.calibrateCommpass(heading: CLHeading)
+        }
+        calibrate = true
     }
     
 }

@@ -133,6 +133,9 @@ class ViewController: UIViewController, MyBluetoothManager, PhraseRetriever, Nav
             
         }
     }
+    func calibrateCommpass(heading: CLHeading) {
+        
+    }
 
 }
 
