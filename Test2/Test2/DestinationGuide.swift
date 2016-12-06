@@ -109,6 +109,7 @@ class DestinationGuide: NSObject {
         else{
             //print("error determining orientation")
             moveStraight() //default to north
+            delegate.currentHeading(heading: "NORTH")
         }
     }
     func moveSouth(){
@@ -128,6 +129,7 @@ class DestinationGuide: NSObject {
         else{
             //print("error determining orientation")
             turnAround() //default to north
+            delegate.currentHeading(heading: "NORTH")
         }
     }
     func moveEast(){
@@ -146,6 +148,7 @@ class DestinationGuide: NSObject {
         else{
             //print("error determining orientation")
             turnRight() //default to north
+            delegate.currentHeading(heading: "NORTH")
         }
     }
     func moveWest(){
@@ -164,6 +167,7 @@ class DestinationGuide: NSObject {
         else{
             print("error determining orientation")
             turnLeft() //default to north
+            delegate.currentHeading(heading: "NORTH")
         }
     }
     func turnRight() {
